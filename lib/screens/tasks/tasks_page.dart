@@ -6,7 +6,14 @@ import 'package:amplified_todo/widgets/slidable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:intl/intl.dart';
+
 import 'package:http/http.dart' as http;
+
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+
+import 'package:get/get.dart';
+import 'package:amplified_todo/theme.dart';
 
 class TasksPage extends StatefulWidget {
   TasksPage({Key key}) : super(key: key);
@@ -21,6 +28,12 @@ class _TasksPageState extends State<TasksPage> {
   List<dynamic> data;
 
   int _counter = 0;
+
+  // Pull to refresh
+  static const _indicatorSize = 150.0;
+
+  /// Whether to render check mark instead of spinner
+  bool _renderCompleteState = false;
 
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
   // Shared Preferennces
@@ -80,143 +93,174 @@ class _TasksPageState extends State<TasksPage> {
     return desc;
   }
 
+  formatDate(date) {
+    if (date != 'null') {
+      DateTime tempDate = new DateFormat("yyyy-MM-dd").parse(date);
+      String finalDate = new DateFormat("dd/MM/yyyy").format(tempDate);
+      String stringDate = finalDate.toString();
+      return "Vence: ${stringDate.substring(0, 10)}";
+    } else {
+      return " Sin fecha limite";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Tareas"),
-        elevation: 1.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.filter_list,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                // TODO: Implementar el filtrado de tareas
-                print("HAZ SELECCIONADO EL FILTRO!!!");
-              })
-        ],
-      ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15.0),
-          child: GestureDetector(
-            child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, position) {
-                  return SlidableWidget(
-                    child: Container(
-                      margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 150,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)),
-                        color: Colors.white,
-                        child: Row(
-                          children: [
-                            Container(
-                              color: Colors.green,
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  print('testing');
-                                  print(data[position]);
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 9.0),
-                                    Text(
-                                      "${data[position]['title']}",
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: 10.0),
-                                    Text(shortenDescription(
-                                        "${data[position]['description']}",
-                                        descLimit: 100)),
-                                    SizedBox(height: 7.0),
-                                    Text(
-                                      "Asignado a:",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 11.0,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(height: 7.0),
-                                    Row(
+      backgroundColor: context.theme.backgroundColor,
+      appBar: _appBar(),
+      body: CustomRefreshIndicator(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: GestureDetector(
+                child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, position) {
+                      return SlidableWidget(
+                        child: Container(
+                          margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          height: 150,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                            color: Colors.white,
+                            child: Row(
+                              children: [
+                                Container(
+                                  color: data[position]['is_completed']
+                                      ? Colors.green
+                                      : Colors.yellow,
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      print('testing');
+                                      print(data[position]);
+                                    },
+                                    child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          height: 30.0,
-                                          width: 30.0,
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Text("Nombre"),
-                                        SizedBox(width: 130.0),
+                                        SizedBox(height: 9.0),
                                         Text(
-                                          "Vence:",
+                                          "${data[position]['title']}",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: primaryColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 10.0),
+                                        Text(shortenDescription(
+                                            "${data[position]['description']}",
+                                            descLimit: 100)),
+                                        SizedBox(height: 7.0),
+                                        Text(
+                                          "Asignado a:",
                                           style: TextStyle(
                                               color: Colors.grey,
                                               fontSize: 11.0,
                                               fontWeight: FontWeight.w600),
                                         ),
-                                        Text(
-                                          "22/10/2021",
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 11.0,
-                                              fontWeight: FontWeight.w600),
-                                        ),
+                                        SizedBox(height: 7.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 30.0,
+                                              width: 30.0,
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Text(
+                                                "${data[position]['user_asigned_to']}"),
+                                            SizedBox(width: 100.0),
+                                            Text(
+                                              formatDate(
+                                                  "${data[position]['due_date']}"),
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 11.0,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ],
+                                        )
                                       ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onDismissed: (action) => dismissSlidableItem(
+                            context,
+                            data[position]['_id_task'],
+                            data[position]['title'],
+                            action),
+                      );
+                    }),
+              ),
+            ),
+          ),
+          onRefresh: () {
+            Future.delayed(const Duration(seconds: 2));
+            loadTasks();
+          },
+          builder: (
+            BuildContext context,
+            Widget child,
+            IndicatorController controller,
+          ) {
+            return AnimatedBuilder(
+              animation: controller,
+              builder: (BuildContext context, _) {
+                return Stack(
+                  alignment: Alignment.topCenter,
+                  children: <Widget>[
+                    if (!controller.isIdle)
+                      Positioned(
+                        top: 35.0 * controller.value,
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(
+                            value: !controller.isLoading
+                                ? controller.value.clamp(0.0, 1.0)
+                                : null,
+                          ),
                         ),
                       ),
+                    Transform.translate(
+                      offset: Offset(0, 100.0 * controller.value),
+                      child: child,
                     ),
-                    onDismissed: (action) =>
-                        dismissSlidableItem(context, position, action),
-                  );
-                }),
-          ),
-        ),
-      ),
+                  ],
+                );
+              },
+            );
+          }),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: Container(height: 50.0),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed('/addTask');
+        },
         tooltip: 'Add a task',
         child: const Icon(Icons.add),
       ),
@@ -224,7 +268,34 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  showAlertDialog(BuildContext context, int position) {
+  _appBar() {
+    return AppBar(
+        brightness: context.theme.brightness,
+        title: Text(
+          "Mis tareas",
+          style: headingTextStyle,
+        ),
+        elevation: 0,
+        backgroundColor: context.theme.backgroundColor,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Icon(Icons.arrow_back_ios, size: 24, color: primaryClr),
+        ),
+        actions: [
+          CircleAvatar(
+            radius: 16,
+            backgroundImage: NetworkImage(
+                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ]);
+  }
+
+  showAlertDialog(BuildContext context, int position, String taskTitle) {
     deleteTask() async {
       String url = "http://localhost:8000/api/v1/task/delete/${position}";
       var jsonResponse;
@@ -265,7 +336,8 @@ class _TasksPageState extends State<TasksPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Eliminar tarea"),
-      content: Text("¿Estás seguro que deseas eliminar la tarea?"),
+      content:
+          Text("¿Estás seguro que deseas eliminar la tarea '${taskTitle}'?"),
       actions: [
         cancel,
         deleteButton,
@@ -281,8 +353,8 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  void dismissSlidableItem(
-      BuildContext context, int position, SlidableAction action) {
+  void dismissSlidableItem(BuildContext context, int position, String taskTitle,
+      SlidableAction action) {
     setState(() {});
 
     switch (action) {
@@ -296,7 +368,7 @@ class _TasksPageState extends State<TasksPage> {
         Utils.showSnackBar(context, 'Selected more');
         break;
       case SlidableAction.delete:
-        showAlertDialog(context, position);
+        showAlertDialog(context, position, taskTitle);
         break;
     }
   }

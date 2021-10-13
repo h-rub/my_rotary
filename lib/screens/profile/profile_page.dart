@@ -1,10 +1,14 @@
 import 'dart:convert';
 
 import 'package:amplified_todo/screens/home/home_page.dart';
+import 'package:amplified_todo/services/theme_services.dart';
 import 'package:amplified_todo/utils/alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
+import 'package:amplified_todo/theme.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -83,29 +87,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              //Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (BuildContext context) => SettingsPage()));
+          elevation: 0,
+          backgroundColor: context.theme.backgroundColor,
+          leading: GestureDetector(
+            onTap: () {
+              ThemeService().switchTheme();
+              //notifyHelper.scheduledNotification();
+              //notifyHelper.periodicalyNotification();
             },
+            child: Icon(
+                Get.isDarkMode ? FlutterIcons.sun_fea : FlutterIcons.moon_fea,
+                color: Get.isDarkMode ? Colors.white : darkGreyClr),
           ),
-        ],
-      ),
+          actions: [
+            SizedBox(
+              width: 20,
+            ),
+          ]),
       body: Container(
         //padding: EdgeInsets.only(left: 25, right: 20, bottom: 20, top: 35),
         child: GestureDetector(

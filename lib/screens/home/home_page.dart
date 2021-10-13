@@ -10,6 +10,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'grid_dashboard.dart';
+import 'package:amplified_todo/theme.dart';
+import 'package:amplified_todo/widgets/input_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:get/get.dart';
+import 'package:amplified_todo/theme.dart';
+import 'package:amplified_todo/widgets/button.dart';
+import 'package:amplified_todo/widgets/input_field.dart';
+import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'package:amplified_todo/theme.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -75,15 +86,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
+        backgroundColor: context.theme.backgroundColor,
+        brightness: context.theme.brightness,
         elevation: 0,
-        backgroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-                icon: SvgPicture.asset("assets/logout.svg"),
+                icon: Icon(Icons.logout, color: colorIcon),
                 onPressed: () {
                   logout();
                 }),
@@ -154,12 +166,7 @@ Widget Dashboard(String first_name, context) {
                   fontFamily: 'SFPro',
                   fontWeight: FontWeight.w600)),
       SizedBox(height: 7),
-      Text("Dashboard",
-          style: TextStyle(
-              fontSize: 18,
-              fontFamily: 'SFPro',
-              fontWeight: FontWeight.w300,
-              color: primaryColor)),
+      Text("Dashboard", style: titleTextStle),
       GridView.count(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -224,8 +231,10 @@ Widget Dashboard(String first_name, context) {
           children: [
             Expanded(
                 child: Image(
-              image: AssetImage('assets/logo.png'),
-              height: 70,
+              image: AssetImage(
+                Get.isDarkMode ? "assets/logo-light.png" : "assets/logo.png",
+              ),
+              height: Get.isDarkMode ? 60 : 75,
             )),
           ],
         ),

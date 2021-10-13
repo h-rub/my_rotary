@@ -1,9 +1,13 @@
 import 'package:amplified_todo/screens/home/home_page.dart';
 import 'package:amplified_todo/screens/login/login.dart';
 import 'package:amplified_todo/screens/profile/profile_page.dart';
+import 'package:amplified_todo/screens/tasks/add_task.dart';
+import 'package:amplified_todo/services/theme_services.dart';
+import 'package:amplified_todo/theme.dart';
 import 'package:flutter/material.dart';
 // dart async library we will refer to when setting up real time updates
 import 'dart:async';
+import 'package:get/get.dart';
 
 import 'package:amplified_todo/utils/validators/return_token.dart';
 
@@ -21,13 +25,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(token);
-    return MaterialApp(
+    return GetMaterialApp(
+      theme: Themes.light,
+      darkTheme: Themes.dark,
+      themeMode: ThemeService().theme,
       title: 'Rotary Club Monterrey',
-      theme: ThemeData(
-        primaryColor: primaryColor,
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
       //home: token != null ? LoginPage() : HomePage(),
       debugShowCheckedModeBanner: false,
       initialRoute: token == null ? '/login' : '/',
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/profile': (context) => EditProfilePage(),
         '/tasks': (context) => TasksPage(),
+        '/addTask': (context) => AddTaskPage(),
       },
     );
   }
