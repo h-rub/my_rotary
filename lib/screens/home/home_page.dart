@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/screens/login/login.dart';
+import 'package:amplified_todo/services/profile_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
+import 'dart:math' as math; // import this
 
 import 'grid_dashboard.dart';
 import 'package:amplified_todo/theme.dart';
@@ -43,7 +49,8 @@ class _HomePageState extends State<HomePage> {
   logout() async {
     final SharedPreferences prefs = await _prefs;
     String email = await prefs.getString("email");
-    String url = "http://localhost:8000/api/v1/auth/logout/";
+    String url =
+        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/logout/";
     Map body = {"email": email};
     var jsonResponse;
     var res = await http.post(url, body: body);
@@ -65,15 +72,50 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  String url_image;
+  String bio_shared;
+
   loadProfileData() async {
     final SharedPreferences prefs = await _prefs;
-    String shared_first_name = await prefs.getString("first_name");
-    var picture_shared = await prefs.getString("picture");
+    int user_id = await prefs.getInt("user_id");
+    String token = await prefs.getString("token");
+
+    String url =
+        "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${user_id}";
+    var jsonResponse;
+    var res = await http.get(
+      url,
+      headers: {
+        'Authorization': "Token ${token}",
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+    );
+
+    if (res.statusCode == 200) {
+      String source = Utf8Decoder().convert(res.bodyBytes);
+      jsonResponse = json.decode(source);
+
+      var picture_json = jsonResponse['picture'];
+      var bio = jsonResponse['bio'];
+
+      print(picture_json);
+
+      //await prefs.setString("picture", jsonResponse['picture']);
+      // print("Status code ${res.statusCode}");
+      // print("Response JSON ${jsonResponse}");
+      setState(() {
+        url_image = picture_json;
+        bio_shared = bio;
+      });
+      //print(data);
+      if (jsonResponse != Null) {}
+    } else if (res.statusCode == 401) {
+      print("Error de autenticación");
+    } else if (res.statusCode == 500) {
+      print("Error del servidor");
+    }
     print(picture);
-    setState(() {
-      first_name = shared_first_name;
-      picture = picture_shared;
-    });
+    setState(() {});
   }
 
   @override
@@ -84,7 +126,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dipose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
+    userInfo.biography = bio_shared;
+    userInfo.urlPicture = url_image;
+
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
@@ -94,26 +145,31 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.logout, color: colorIcon),
-                onPressed: () {
-                  logout();
-                }),
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: IconButton(
+                  icon: Icon(Icons.logout, color: colorIcon),
+                  onPressed: () {
+                    logout();
+                  }),
+            ),
             Container(
               width: 50,
               height: 50,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: picture != null
-                          ? AssetImage("assets/nahaidi.png")
+                      image: userInfo.urlPicture != ""
+                          ? NetworkImage(
+                              "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
                           : AssetImage("assets/default-profile.png"),
                       fit: BoxFit.cover)),
             )
           ],
         ),
       ),
-      body: Dashboard(first_name, context),
+      body: Dashboard(userInfo.firstName, context),
     );
   }
 }
@@ -126,7 +182,7 @@ Widget Dashboard(String first_name, context) {
       subtitle: "Personaliza tu perfil",
       color: Colors.red,
       img: "assets/user.png",
-      page: "/profile");
+      page: "/me");
 
   Items item2 = new Items(
       title: "Tareas",
@@ -157,16 +213,20 @@ Widget Dashboard(String first_name, context) {
       first_name == null
           ? Text("Bienvenido 👀",
               style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontFamily: 'SFPro',
                   fontWeight: FontWeight.w600))
           : Text("Hola ${first_name} 👋",
               style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontFamily: 'SFPro',
                   fontWeight: FontWeight.w600)),
       SizedBox(height: 7),
-      Text("Dashboard", style: titleTextStle),
+      Text("Dashboard",
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'SFPro',
+          )),
       GridView.count(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -195,7 +255,7 @@ Widget Dashboard(String first_name, context) {
                       data.title,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),
                     SizedBox(
@@ -205,7 +265,7 @@ Widget Dashboard(String first_name, context) {
                       data.subtitle,
                       style: TextStyle(
                           color: Colors.white38,
-                          fontSize: 12,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600),
                     ),
                     SizedBox(

@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/screens/home/home_page.dart';
+import 'package:amplified_todo/screens/tasks/tasks_page.dart';
 import 'package:amplified_todo/utils/utils.dart';
 import 'package:amplified_todo/widgets/alert_dialog.dart';
 import 'package:amplified_todo/widgets/slidable_widget.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,14 +19,14 @@ import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:get/get.dart';
 import 'package:amplified_todo/theme.dart';
 
-class TasksPage extends StatefulWidget {
-  TasksPage({Key key}) : super(key: key);
+class MyTasksPage extends StatefulWidget {
+  MyTasksPage({Key key}) : super(key: key);
 
   @override
-  _TasksPageState createState() => _TasksPageState();
+  _MyTasksPageState createState() => _MyTasksPageState();
 }
 
-class _TasksPageState extends State<TasksPage> {
+class _MyTasksPageState extends State<MyTasksPage> {
   String token;
   String url;
   List<dynamic> data;
@@ -35,9 +34,8 @@ class _TasksPageState extends State<TasksPage> {
 
   int _counter = 0;
 
-  Timer timer;
+  Timer myTimer;
   int counter = 0;
-
   bool isLoading = true;
 
   // Pull to refresh
@@ -49,37 +47,6 @@ class _TasksPageState extends State<TasksPage> {
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
   // Shared Preferennces
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  loadTasks() async {
-    final SharedPreferences prefs = await _prefs;
-    String token = await prefs.getString("token");
-    String url = "https://morning-retreat-88403.herokuapp.com/api/v1/tasks/all";
-    var jsonResponse;
-    var res = await http.get(
-      url,
-      headers: {
-        'Authorization': "Token ${token}",
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-    );
-
-    if (res.statusCode == 200) {
-      String source = Utf8Decoder().convert(res.bodyBytes);
-      jsonResponse = json.decode(source);
-      // print("Status code ${res.statusCode}");
-      // print("Response JSON ${jsonResponse}");
-      setState(() {
-        isLoading = !isLoading;
-        data = new List.from(jsonResponse.reversed);
-      });
-      //print(data);
-      if (jsonResponse != Null) {}
-    } else if (res.statusCode == 401) {
-      print("Error de autenticación");
-    } else if (res.statusCode == 500) {
-      print("Error del servidor");
-    }
-  }
 
   loadMyTasks(int myUserID) async {
     final SharedPreferences prefs = await _prefs;
@@ -122,11 +89,12 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
-    loadTasks();
+    loadMyTasks(1);
   }
 
   @override
   void dispose() {
+    myTimer.cancel();
     super.dispose();
   }
 
@@ -282,7 +250,7 @@ class _TasksPageState extends State<TasksPage> {
                   setState(() {
                     isLoading = true;
                   });
-                  loadTasks();
+                  loadMyTasks(1);
                 },
                 builder: (
                   BuildContext context,
@@ -327,16 +295,14 @@ class _TasksPageState extends State<TasksPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.list, color: Colors.amber),
+                  icon: Icon(Icons.list),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
                 SizedBox(width: 48.0),
                 IconButton(
-                  icon: Icon(
-                    Icons.filter_list,
-                  ),
+                  icon: Icon(Icons.filter_list, color: Colors.amber),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/myTasks');
                   },
@@ -361,18 +327,14 @@ class _TasksPageState extends State<TasksPage> {
     return AppBar(
         brightness: context.theme.brightness,
         title: Text(
-          "Tareas del club",
+          "Mis tareas",
           style: headingTextStyle,
         ),
         elevation: 4,
         backgroundColor: context.theme.backgroundColor,
         leading: GestureDetector(
           onTap: () {
-            navigator.pushAndRemoveUntil<void>(
-              MaterialPageRoute<void>(
-                  builder: (BuildContext context) => HomePage()),
-              ModalRoute.withName('/'),
-            );
+            Get.back();
           },
           child: Icon(Icons.arrow_back_ios, size: 24, color: primaryClr),
         ),
@@ -404,11 +366,12 @@ class _TasksPageState extends State<TasksPage> {
         jsonResponse = json.decode(source);
         print("Status code ${res.statusCode}");
         print("Response JSON ${jsonResponse}");
-        Navigator.of(context).pop();
-        setState(() {
-          isLoading = true;
-        });
-        loadTasks();
+        navigator.pushAndRemoveUntil<void>(
+          MaterialPageRoute<void>(
+              builder: (BuildContext context) => TasksPage()),
+          ModalRoute.withName('/tasks'),
+        );
+        loadMyTasks(1);
         if (jsonResponse != Null) {}
       } else if (res.statusCode == 401) {
         print("Error de autenticación");
@@ -421,6 +384,9 @@ class _TasksPageState extends State<TasksPage> {
     Widget deleteButton = TextButton(
       child: Text("Eliminar", style: TextStyle(color: Colors.red)),
       onPressed: () {
+        setState(() {
+          isLoading = true;
+        });
         deleteTask();
       },
     );

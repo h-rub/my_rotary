@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/screens/home/home_page.dart';
 import 'package:amplified_todo/utils/alert_dialog.dart';
 import 'package:amplified_todo/utils/validators/validate_email.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:amplified_todo/screens/register/register.dart';
 import 'package:amplified_todo/utils/hex_color.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,9 +42,10 @@ class _LoginState extends State<Login> {
   bool _isLoading = false;
 
   // Login API Call section
-  signIn(String email, String password) async {
+  signIn(String email, String password, userInfo) async {
     final SharedPreferences prefs = await _prefs;
-    String url = "http://localhost:8000/api/v1/auth/login/";
+    String url =
+        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/login/";
     Map body = {"email": email, "password": password};
     var jsonResponse;
     var res = await http.post(url, body: body);
@@ -57,14 +60,23 @@ class _LoginState extends State<Login> {
           _isLoading = false;
         });
 
+        prefs.setInt("user_id", jsonResponse['id']);
         prefs.setString("token", jsonResponse['token']);
         prefs.setString("email", jsonResponse['email']);
-        prefs.setString("first_name", jsonResponse['first_name']);
-        prefs.setString("last_name", jsonResponse['last_name']);
-        prefs.setString("company", jsonResponse['company']);
-        prefs.setString("adress", jsonResponse['address']);
-        prefs.setString("biography", jsonResponse['biography']);
-        prefs.setString("picture", jsonResponse['picture']);
+
+        userInfo.uid = jsonResponse['id'];
+        userInfo.firstName = jsonResponse['first_name'];
+        userInfo.lastName = jsonResponse['last_name'];
+        userInfo.email = jsonResponse['email'];
+        userInfo.company = jsonResponse['company'];
+        userInfo.address = jsonResponse['address'];
+
+        String urlPhoto =
+            "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${userInfo.uid}";
+        var res_photo = await http.get(urlPhoto);
+        var jsonResponsePicture = json.decode(res_photo.body);
+        userInfo.urlPicture = jsonResponsePicture['picture'];
+        print("Picture User info: ${userInfo.urlPicture}");
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => HomePage()),
             (Route<dynamic> route) => false);
@@ -82,6 +94,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
+
     return Stack(
       children: <Widget>[
         Container(
@@ -156,8 +170,8 @@ class _LoginState extends State<Login> {
                           //     MaterialPageRoute(builder: (context) => HomePage()),
                           //     ModalRoute.withName("/Home"));
                           // // Call login service
-                          signIn(
-                              _emailController.text, _passwordController.text);
+                          signIn(_emailController.text,
+                              _passwordController.text, userInfo);
                     },
                     child: Text(
                       'Iniciar sesión',

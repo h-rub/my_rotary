@@ -1,13 +1,23 @@
+import 'package:amplified_todo/providers/user_info.dart';
+import 'package:amplified_todo/services/profile_services.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amplified_todo/screens/home/home_page.dart';
 import 'package:amplified_todo/services/theme_services.dart';
 import 'package:amplified_todo/utils/alert_dialog.dart';
-import 'package:flutter/material.dart';
+import 'package:amplified_todo/widgets/input_field.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
+import 'dart:convert' as convert;
+import 'package:get/get.dart' hide FormData, Response;
 import 'package:amplified_todo/theme.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -19,6 +29,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
   final Color thirdColor = Color.fromRGBO(247, 168, 27, 1);
 
+  int _user_id;
   String _firstName;
   String _lastName;
   String _email;
@@ -45,21 +56,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   loadProfileData() async {
     final SharedPreferences prefs = await _prefs;
-    String shared_first_name = await prefs.getString("first_name");
-    String shared_last_name = await prefs.getString("last_name");
-    String shared_email = await prefs.getString("email");
-    String shared_company = await prefs.getString("company");
-    String shared_adress = await prefs.getString("adress");
-    String shared_bio = await prefs.getString("biography");
-    String shared_picture = await prefs.getString("picture");
+    int shared_user_id = await prefs.getInt("user_id");
+
     setState(() {
-      _firstName = shared_first_name;
-      _lastName = shared_last_name;
-      _email = shared_email;
-      _company = shared_company;
-      _adress = shared_adress;
-      _biography = shared_bio;
-      _picture = shared_picture;
+      _user_id = shared_user_id;
     });
   }
 
@@ -69,36 +69,103 @@ class _EditProfilePageState extends State<EditProfilePage> {
     loadData();
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print("Back To old Screen");
+    print(_picture);
+    ProfileServices().saveProfileURL(_picture);
+    super.dispose();
+  }
+
+  @override
+  Future sendFiletodjango(File file, userInfo) async {
+    final SharedPreferences prefs = await _prefs;
+    var endPoint =
+        "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${_user_id}";
+
+    final request = http.MultipartRequest("POST", Uri.parse(endPoint));
+
+    final headers = {"Content-type": "multipart/form-data"};
+
+    if (file == null) {
+      return;
+    } else {
+      request.files.add(http.MultipartFile(
+          'file', file.readAsBytes().asStream(), file.lengthSync(),
+          filename: file.path.split("/").last));
+
+      request.headers.addAll(headers);
+      final response = await request.send();
+
+      http.Response res = await http.Response.fromStream(response);
+      final resJson = jsonDecode(res.body);
+      await prefs.setString("picture", resJson['url_picture']);
+      print(resJson);
+      userInfo.urlPicture = resJson['url_picture'];
+      setState(() {
+        _picture = resJson['url_picture'];
+      });
+      ProfileServices().saveProfileURL(resJson['url_picture']);
+    }
+  }
+
+  File _image;
+
+  Future getImage(userInfo) async {
+    var status = await Permission.camera.status;
+    if (status.isDenied) {
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+      Permission.photos.request();
+    }
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+      sendFiletodjango(_image, userInfo);
+      print(_image);
+    });
+  }
+
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
     TextEditingController _firstNameController =
-        TextEditingController(text: _firstName);
+        TextEditingController(text: userInfo.firstName);
     TextEditingController _lastNameController =
-        TextEditingController(text: _lastName);
+        TextEditingController(text: userInfo.lastName);
     TextEditingController _emailController =
-        TextEditingController(text: _email);
+        TextEditingController(text: userInfo.email);
     TextEditingController _companyController =
-        TextEditingController(text: _company);
+        TextEditingController(text: userInfo.company);
     TextEditingController _adressController =
-        TextEditingController(text: _adress);
+        TextEditingController(text: userInfo.address);
     TextEditingController _biographyController =
-        TextEditingController(text: _biography);
+        TextEditingController(text: userInfo.biography);
 
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
+          title: Text(
+            "Editar mi perfil",
+            style: headingTextStyle,
+          ),
           elevation: 0,
+          brightness: context.theme.brightness,
           backgroundColor: context.theme.backgroundColor,
           leading: GestureDetector(
-            onTap: () {
-              ThemeService().switchTheme();
-              //notifyHelper.scheduledNotification();
-              //notifyHelper.periodicalyNotification();
-            },
-            child: Icon(
-                Get.isDarkMode ? FlutterIcons.sun_fea : FlutterIcons.moon_fea,
-                color: Get.isDarkMode ? Colors.white : darkGreyClr),
-          ),
+              onTap: () {
+                Navigator.pop(context);
+                //ThemeService().switchTheme();
+                //notifyHelper.scheduledNotification();
+                //notifyHelper.periodicalyNotification();
+              },
+              child: Icon(Icons.arrow_back_ios,
+                  color: Get.isDarkMode ? Colors.white : darkGreyClr)
+              // Get.isDarkMode ? FlutterIcons.sun_fea : FlutterIcons.moon_fea,
+              // color: Get.isDarkMode ? Colors.white : darkGreyClr),
+              ),
           actions: [
             SizedBox(
               width: 20,
@@ -113,14 +180,40 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: ListView(children: [
             Stack(
               children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/bg-profile.jpg'),
-                        fit: BoxFit.fitWidth,
-                        alignment: Alignment.topCenter),
-                  ),
+                Stack(
+                  children: [
+                    Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/bg-profile.jpg'),
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter),
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 155,
+                        right: 0,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 0,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            color: primaryColor,
+                          ),
+                          child: IconButton(
+                            onPressed: () => getImage(userInfo),
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -147,14 +240,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   ],
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: _picture != null
-                                          ? AssetImage('assets/nahaidi.png')
-                                          : AssetImage(
-                                              'assets/default-profile.png')
-                                      //NetworkImage(
-                                      //"https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                                      )),
+                                    fit: BoxFit.cover,
+                                    image: userInfo.urlPicture != ""
+                                        ? NetworkImage(
+                                            "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                                        : AssetImage(
+                                            "assets/default-profile.png"),
+                                    //NetworkImage(
+                                    //"https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
+                                  )),
                             ),
                             Positioned(
                                 bottom: 0,
@@ -165,46 +259,76 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      width: 4,
+                                      width: 0,
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor,
                                     ),
                                     color: primaryColor,
                                   ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
+                                  child: IconButton(
+                                    onPressed: () => getImage(userInfo),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 )),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 35,
+                        height: 15,
                       ),
-                      buildTextField(
-                          "Nombre", "", false, false, _firstNameController),
-                      buildTextField(
-                          "Apellido", "", false, false, _lastNameController),
-                      buildTextField(
-                          "E-mail", "", false, false, _emailController),
-                      buildTextField(
-                          "Compañia", "", false, false, _companyController),
-                      buildTextField(
-                          "Dirección", "", false, false, _adressController),
-                      buildTextField(
-                          "Biografía", "", false, true, _biographyController),
+                      InputField(
+                        title: "Nombre",
+                        hint: "Ingresa tu nombre",
+                        isDescription: false,
+                        controller: _firstNameController,
+                      ),
+                      InputField(
+                        title: "Apellido",
+                        hint: "Ingresa tu apellido",
+                        isDescription: false,
+                        controller: _lastNameController,
+                      ),
+                      InputField(
+                        title: "E-mail",
+                        hint: "Ingresa tu correo",
+                        isDescription: false,
+                        controller: _emailController,
+                      ),
+                      InputField(
+                        title: "Compañia",
+                        hint: "Ingresa tu compañia",
+                        isDescription: false,
+                        controller: _companyController,
+                      ),
+                      InputField(
+                        title: "Dirección",
+                        hint: "Ingresa tu dirección",
+                        isDescription: false,
+                        controller: _adressController,
+                      ),
+                      InputField(
+                        title: "Biografía",
+                        hint: "Cuéntanos un poco sobre ti",
+                        isDescription: true,
+                        controller: _biographyController,
+                      ),
                       SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           OutlineButton(
+                            color: context.theme.backgroundColor,
                             padding: EdgeInsets.symmetric(horizontal: 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.back();
+                            },
                             child: Text("CANCELAR",
                                 style: TextStyle(
                                     fontSize: 14,
@@ -237,45 +361,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ]),
         ),
-      ),
-    );
-  }
-
-  Widget buildTextField(
-      String labelText,
-      String placeholder,
-      bool isPasswordTextField,
-      bool isTextAmplied,
-      TextEditingController formController) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextFormField(
-        controller: formController,
-        maxLines: isTextAmplied ? 5 : 1,
-        obscureText: isPasswordTextField ? showPassword : false,
-        decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
       ),
     );
   }

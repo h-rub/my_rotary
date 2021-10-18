@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,6 +10,9 @@ import 'package:amplified_todo/widgets/button.dart';
 import 'package:amplified_todo/widgets/input_field.dart';
 import 'package:intl/intl.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
 class AddTaskPage extends StatefulWidget {
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
@@ -14,7 +20,7 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
   //String _startTime = DateFormat("hh:mm").format(DateTime.now());
@@ -42,6 +48,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
     //Below shows the time like Sep 15, 2021
     //print(new DateFormat.yMMMd().format(new DateTime.now()));
     print(" starttime " + _startTime);
@@ -53,7 +60,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     //_startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
-      appBar: _appBar(),
+      appBar: _appBar(userInfo),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
@@ -73,7 +80,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   title: "Descripción",
                   hint: "Ingresa una descripción",
                   isDescription: true,
-                  controller: _noteController),
+                  controller: _descController),
               Row(
                 children: [
                   Expanded(
@@ -98,7 +105,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   Expanded(
                     child: InputField(
-                      title: "Hora de finalización",
+                      title: "Hora de fin",
                       isDescription: false,
                       hint: _startTime,
                       widget: IconButton(
@@ -156,7 +163,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: [
                   // _colorChips(),
                   MyButton(
-                    label: "Create Task",
+                    label: "Crear tarea",
                     onTap: () {
                       _validateInputs();
                     },
@@ -174,10 +181,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   _validateInputs() {
-    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDB();
-      Get.back();
-    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
+    if (_titleController.text.isNotEmpty && _descController.text.isNotEmpty) {
+      _addTaskToDB(_titleController.text, _descController.text);
+      //Get.back();
+      Navigator.popAndPushNamed(context, '/tasks');
+    } else if (_titleController.text.isEmpty || _descController.text.isEmpty) {
       Get.snackbar(
         "Required",
         "All fields are required.",
@@ -188,10 +196,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  _addTaskToDB() async {
+  _addTaskToDB(titleContent, descriptionContent) async {
     // await _taskController.addTask(
     //   task: Task(
-    //     note: _noteController.text,
+    //     note: _descController.text,
     //     title: _titleController.text,
     //     date: DateFormat.yMd().format(_selectedDate),
     //     startTime: _startTime,
@@ -203,6 +211,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
     //   ),
     // );
     print("Añadiendo tarea");
+    var jsonResponse;
+
+    final res = await http.post(
+      Uri.parse(
+          'https://morning-retreat-88403.herokuapp.com/api/v1/task/create'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': titleContent,
+        'description': descriptionContent
+      }),
+    );
+    if (res.statusCode == 200) {
+      String source = Utf8Decoder().convert(res.bodyBytes);
+      jsonResponse = json.decode(source);
+      print("Status code ${res.statusCode}");
+      print("Response JSON ${jsonResponse}");
+    }
   }
 
   _colorChips() {
@@ -251,14 +278,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     ]);
   }
 
-  _appBar() {
+  _appBar(userInfo) {
     return AppBar(
         brightness: context.theme.brightness,
         title: Text(
           "Añadir tarea",
           style: headingTextStyle,
         ),
-        elevation: 0,
+        elevation: 4,
         backgroundColor: context.theme.backgroundColor,
         leading: GestureDetector(
           onTap: () {
@@ -268,9 +295,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
         actions: [
           CircleAvatar(
-            radius: 16,
-            backgroundImage: NetworkImage(
-                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
+            radius: 22,
+            backgroundImage: userInfo.urlPicture != ""
+                ? NetworkImage(
+                    "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                : AssetImage("assets/default-profile.png"),
           ),
           SizedBox(
             width: 20,

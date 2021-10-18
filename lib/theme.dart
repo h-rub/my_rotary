@@ -44,7 +44,7 @@ TextStyle get subHeadingTextStyle {
 TextStyle get titleTextStle {
   return GoogleFonts.lato(
     textStyle: TextStyle(
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: FontWeight.bold,
         color: Get.isDarkMode ? Colors.white : Colors.black),
   );
@@ -53,7 +53,7 @@ TextStyle get titleTextStle {
 TextStyle get subTitleTextStle {
   return GoogleFonts.lato(
     textStyle: TextStyle(
-        fontSize: 16,
+        fontSize: 18,
         color: Get.isDarkMode ? Colors.grey[400] : Colors.grey[700]),
   );
 }
