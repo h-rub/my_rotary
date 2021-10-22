@@ -1,6 +1,6 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 import 'package:get/get.dart';
 
 class DetailsPage extends StatefulWidget {

@@ -1,6 +1,6 @@
-import 'package:amplified_todo/providers/user_info.dart';
+import 'package:my_rotary/providers/user_info.dart';
 import 'package:flutter/material.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 import 'package:get/get.dart' hide FormData, Response;
 import 'package:provider/provider.dart';
 

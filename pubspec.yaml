@@ -1,4 +1,4 @@
-name: amplified_todo
+name: my_rotary
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -45,6 +45,7 @@ dependencies:
   provider: ^4.3.3
   settings_ui: ^0.6.0
   community_material_icon: ^5.8.55
+  flutter_launcher_icons: ^0.8.1
 
 
 
@@ -55,6 +56,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/my-rotary-icon.png" 
+  adaptive_icon_background: "assets/icon/my-rotary-icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

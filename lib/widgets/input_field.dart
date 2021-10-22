@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 
 class InputField extends StatelessWidget {
   final String title;

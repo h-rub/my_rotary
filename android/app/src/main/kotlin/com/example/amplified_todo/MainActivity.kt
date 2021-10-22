@@ -1,4 +1,4 @@
-package com.example.amplified_todo
+package com.example.my_rotary
 
 import io.flutter.embedding.android.FlutterActivity
 

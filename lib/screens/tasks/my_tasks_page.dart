@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/screens/tasks/tasks_page.dart';
-import 'package:amplified_todo/utils/utils.dart';
-import 'package:amplified_todo/widgets/alert_dialog.dart';
-import 'package:amplified_todo/widgets/slidable_widget.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:my_rotary/screens/tasks/tasks_page.dart';
+import 'package:my_rotary/utils/utils.dart';
+import 'package:my_rotary/widgets/alert_dialog.dart';
+import 'package:my_rotary/widgets/slidable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,7 +17,7 @@ import 'package:http/http.dart' as http;
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 
 import 'package:get/get.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 
 class MyTasksPage extends StatefulWidget {
   MyTasksPage({Key key}) : super(key: key);

@@ -1,4 +1,4 @@
-# amplified_todo
+# my_rotary
 
 A new Flutter project.
 

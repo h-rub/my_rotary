@@ -1,14 +1,14 @@
-import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/services/profile_services.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:my_rotary/services/profile_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:amplified_todo/screens/home/home_page.dart';
-import 'package:amplified_todo/services/theme_services.dart';
-import 'package:amplified_todo/utils/alert_dialog.dart';
-import 'package:amplified_todo/widgets/input_field.dart';
+import 'package:my_rotary/screens/home/home_page.dart';
+import 'package:my_rotary/services/theme_services.dart';
+import 'package:my_rotary/utils/alert_dialog.dart';
+import 'package:my_rotary/widgets/input_field.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:get/get.dart' hide FormData, Response;
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override

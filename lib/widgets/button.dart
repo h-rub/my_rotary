@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 
 class MyButton extends StatelessWidget {
   final Function onTap;

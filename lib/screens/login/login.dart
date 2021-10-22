@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/screens/home/home_page.dart';
-import 'package:amplified_todo/utils/alert_dialog.dart';
-import 'package:amplified_todo/utils/validators/validate_email.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:my_rotary/screens/home/home_page.dart';
+import 'package:my_rotary/utils/alert_dialog.dart';
+import 'package:my_rotary/utils/validators/validate_email.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/gestures.dart';
 
-import 'package:amplified_todo/screens/register/register.dart';
-import 'package:amplified_todo/utils/hex_color.dart';
+import 'package:my_rotary/screens/register/register.dart';
+import 'package:my_rotary/utils/hex_color.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

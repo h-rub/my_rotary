@@ -1,4 +1,4 @@
-import 'package:amplified_todo/screens/tasks/tasks_page.dart';
+import 'package:my_rotary/screens/tasks/tasks_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:amplified_todo/screens/login/login.dart';
-import 'package:amplified_todo/utils/alert_dialog.dart';
+import 'package:my_rotary/screens/login/login.dart';
+import 'package:my_rotary/utils/alert_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/gestures.dart';

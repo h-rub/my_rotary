@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/screens/login/login.dart';
-import 'package:amplified_todo/services/profile_services.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:my_rotary/screens/login/login.dart';
+import 'package:my_rotary/services/profile_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,17 +16,17 @@ import 'package:http/http.dart' as http;
 import 'dart:math' as math; // import this
 
 import 'grid_dashboard.dart';
-import 'package:amplified_todo/theme.dart';
-import 'package:amplified_todo/widgets/input_field.dart';
+import 'package:my_rotary/theme.dart';
+import 'package:my_rotary/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get/get.dart';
-import 'package:amplified_todo/theme.dart';
-import 'package:amplified_todo/widgets/button.dart';
-import 'package:amplified_todo/widgets/input_field.dart';
+import 'package:my_rotary/theme.dart';
+import 'package:my_rotary/widgets/button.dart';
+import 'package:my_rotary/widgets/input_field.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);

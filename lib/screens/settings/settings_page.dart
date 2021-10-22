@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:amplified_todo/providers/user_info.dart';
-import 'package:amplified_todo/screens/login/login.dart';
-import 'package:amplified_todo/services/theme_services.dart';
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:my_rotary/screens/login/login.dart';
+import 'package:my_rotary/services/theme_services.dart';
+import 'package:my_rotary/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import 'package:get/get.dart' hide FormData, Response;
-import 'package:amplified_todo/theme.dart';
+import 'package:my_rotary/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
