@@ -7,6 +7,7 @@ class InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final Widget widget;
+  final bool isReadOnly;
 
   final bool isDescription;
 
@@ -15,6 +16,7 @@ class InputField extends StatelessWidget {
       this.controller,
       @required this.hint,
       this.widget,
+      this.isReadOnly,
       this.isDescription});
 
   @override
@@ -53,7 +55,7 @@ class InputField extends StatelessWidget {
                       autofocus: false,
                       cursorColor:
                           Get.isDarkMode ? Colors.grey[100] : Colors.grey[600],
-                      readOnly: widget == null ? false : true,
+                      readOnly: isReadOnly == null ? false : true,
                       controller: controller,
                       style: subTitleTextStle,
                       decoration: InputDecoration(

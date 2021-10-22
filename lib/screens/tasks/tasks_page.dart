@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:amplified_todo/providers/task_info.dart';
 import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/screens/home/home_page.dart';
 import 'package:amplified_todo/utils/utils.dart';
@@ -156,6 +157,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final userInfo = Provider.of<UserInfo>(context);
+    final taskInfo = Provider.of<TaskInfo>(context);
     double _width = MediaQuery.of(context).size.width - 40;
     double _height = MediaQuery.of(context).size.width;
     double _separator = _width / 7.5;
@@ -177,6 +179,8 @@ class _TasksPageState extends State<TasksPage> {
                                 onTap: () {
                                   print('testing');
                                   print(data[position]);
+                                  taskInfo.title = data[position]['title'];
+                                  Navigator.of(context).pushNamed('/detail');
                                 },
                                 child: Container(
                                   margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),

@@ -86,7 +86,7 @@ class _MyProfileState extends State<MyProfile> {
 
   Widget buildContent(userInfo) => Column(
         children: [
-          const SizedBox(height: 12.0),
+          const SizedBox(height: 30.0),
           Text("${userInfo.firstName} ${userInfo.lastName}",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),

@@ -1,3 +1,4 @@
+import 'package:amplified_todo/providers/task_info.dart';
 import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/screens/home/home_page.dart';
 import 'package:amplified_todo/screens/login/login.dart';
@@ -17,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'screens/profile/my_profile.dart';
 import 'screens/profile/test_page.dart';
 import 'screens/settings/settings_page.dart';
+import 'screens/tasks/detail_task.dart';
+import 'screens/tasks/details_page.dart';
 import 'screens/tasks/tasks_page.dart';
 
 void main() {
@@ -32,7 +35,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     print(token);
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserInfo())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserInfo()),
+        ChangeNotifierProvider(create: (_) => TaskInfo())
+      ],
       child: GetMaterialApp(
         theme: Themes.light,
         darkTheme: Themes.dark,
@@ -52,6 +58,7 @@ class MyApp extends StatelessWidget {
           '/addTask': (context) => AddTaskPage(),
           '/myTasks': (context) => MyTasksPage(),
           '/test': (context) => TestPage(),
+          '/detail': (context) => DetailsPageTask()
         },
       ),
     );

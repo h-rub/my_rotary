@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amplified_todo/providers/task_info.dart';
 import 'package:amplified_todo/providers/user_info.dart';
 import 'package:amplified_todo/widgets/input_field.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,12 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-class AddTaskPage extends StatefulWidget {
+class DetailsPageTask extends StatefulWidget {
   @override
-  _AddTaskPageState createState() => _AddTaskPageState();
+  _DetailsPageTaskState createState() => _DetailsPageTaskState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _DetailsPageTaskState extends State<DetailsPageTask> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
@@ -47,8 +48,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Limpia el controlador cuando el widget se elimine del árbol de widgets
+    // Esto también elimina el listener _printLatestValue
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userInfo = Provider.of<UserInfo>(context);
+
+    final taskInfo = Provider.of<TaskInfo>(context);
     //Below shows the time like Sep 15, 2021
     //print(new DateFormat.yMMMd().format(new DateTime.now()));
     print(" starttime " + _startTime);
@@ -61,6 +78,49 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: _appBar(userInfo),
+      bottomNavigationBar: SizedBox(
+        height: 80.0,
+        child: Material(
+          color: Theme.of(context).bottomAppBarColor,
+          shadowColor: Colors.black,
+          elevation: 32.0,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    print("Marcando la tarea como completado");
+                    //Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Eliminar',
+                    style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    print("Marcando la tarea como completado");
+                    //Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Marcar como completado',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: SingleChildScrollView(
@@ -71,20 +131,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 height: 8,
               ),
               InputField(
-                title: "Título",
-                hint: "Ingresa un titulo",
-                controller: _titleController,
-                isDescription: false,
-              ),
+                  title: "Título",
+                  hint: taskInfo.title,
+                  controller: _titleController,
+                  isDescription: false,
+                  isReadOnly: true),
               InputField(
                   title: "Descripción",
                   hint: "Ingresa una descripción",
                   isDescription: true,
-                  controller: _descController),
+                  controller: _descController,
+                  isReadOnly: true),
               Row(
                 children: [
                   Expanded(
                     child: InputField(
+                      isReadOnly: true,
                       title: "Fecha límite",
                       isDescription: false,
                       hint: DateFormat("dd/MM/yyyy").format(_selectedDate),
@@ -105,6 +167,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   Expanded(
                     child: InputField(
+                      isReadOnly: true,
                       title: "Hora de fin",
                       isDescription: false,
                       hint: _startTime,
@@ -115,7 +178,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         )),
                         onPressed: () {
                           _getTimeFromUser(isStartTime: true);
-                          setState(() {});
                         },
                       ),
                     ),
@@ -123,9 +185,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ],
               ),
               InputField(
+                isReadOnly: true,
                 title: "Asignado a",
                 isDescription: false,
-                hint: "Hever Rubio",
+                hint: _selectedRemind,
                 widget: Row(
                   children: [
                     DropdownButton<String>(
@@ -162,12 +225,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // _colorChips(),
-                  MyButton(
-                    label: "Crear tarea",
-                    onTap: () {
-                      _validateInputs();
-                    },
-                  ),
                 ],
               ),
               SizedBox(
@@ -199,19 +256,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   _addTaskToDB(
       titleContent, descriptionContent, selectedDate, _startTime) async {
-    // await _taskController.addTask(
-    //   task: Task(
-    //     note: _descController.text,
-    //     title: _titleController.text,
-    //     date: DateFormat.yMd().format(_selectedDate),
-    //     startTime: _startTime,
-    //     endTime: _endTime,
-    //     remind: _selectedRemind,
-    //     repeat: _selectedRepeat,
-    //     color: _selectedColor,
-    //     isCompleted: 0,
-    //   ),
-    // );
     print("Añadiendo tarea");
     print("Hora que se agregó: ${_startTime}");
 
@@ -292,7 +336,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return AppBar(
         brightness: context.theme.brightness,
         title: Text(
-          "Añadir tarea",
+          "Tarea #",
           style: headingTextStyle,
         ),
         elevation: 4,
@@ -304,39 +348,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: Icon(Icons.arrow_back_ios, size: 24, color: primaryClr),
         ),
         actions: [
-          CircleAvatar(
-            radius: 22,
-            backgroundImage: userInfo.urlPicture != ""
-                ? NetworkImage(
-                    "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
-                : AssetImage("assets/default-profile.png"),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/editTask');
+              },
+              icon: Icon(Icons.edit, color: colorIcon),
+            ),
           ),
           SizedBox(
             width: 20,
           ),
         ]);
   }
-
-  // _compareTime() {
-  //   print("compare time");
-  //   print(_startTime);
-  //   print(_endTime);
-
-  //   var _start = double.parsestartTime);
-  //   var _end = toDouble(_endTime);
-
-  //   print(_start);
-  //   print(_end);
-
-  //   if (_start > _end) {
-  //     Get.snackbar(
-  //       "Invalid!",
-  //       "Time duration must be positive.",
-  //       snackPosition: SnackPosition.BOTTOM,
-  //       overlayColor: context.theme.backgroundColor,
-  //     );
-  //   }
-  // }
 
   double toDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;
 

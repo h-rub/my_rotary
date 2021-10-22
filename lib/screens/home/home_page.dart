@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: userInfo.urlPicture != ""
+                      image: userInfo.urlPicture != null
                           ? NetworkImage(
                               "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
                           : AssetImage("assets/default-profile.png"),
