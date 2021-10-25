@@ -51,8 +51,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
   loadMyTasks(int myUserID) async {
     final SharedPreferences prefs = await _prefs;
     String token = await prefs.getString("token");
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/tasks?user=${myUserID}";
+    String url = "http://rotary.syncronik.com/api/v1/tasks?user=${myUserID}";
     var jsonResponse;
     var res = await http.get(
       url,
@@ -343,7 +342,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
             radius: 22,
             backgroundImage: userInfo.urlPicture != ""
                 ? NetworkImage(
-                    "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                    "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
                 : AssetImage("assets/default-profile.png"),
           ),
           SizedBox(
@@ -354,8 +353,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
 
   showAlertDialog(BuildContext context, int position, String taskTitle) {
     deleteTask() async {
-      String url =
-          "https://morning-retreat-88403.herokuapp.com/api/v1/task/delete/${position}";
+      String url = "http://rotary.syncronik.com/api/v1/task/delete/${position}";
       var jsonResponse;
       var res = await http.get(
         url,

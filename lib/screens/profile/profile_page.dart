@@ -81,8 +81,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Future sendFiletodjango(File file, userInfo) async {
     final SharedPreferences prefs = await _prefs;
-    var endPoint =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${_user_id}";
+    var endPoint = "http://rotary.syncronik.com/api/v1/profile-pic/${_user_id}";
 
     final request = http.MultipartRequest("POST", Uri.parse(endPoint));
 
@@ -243,7 +242,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     fit: BoxFit.cover,
                                     image: userInfo.urlPicture != ""
                                         ? NetworkImage(
-                                            "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                                            "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
                                         : AssetImage(
                                             "assets/default-profile.png"),
                                     //NetworkImage(

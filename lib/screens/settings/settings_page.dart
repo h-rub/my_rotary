@@ -32,8 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
   logout() async {
     final SharedPreferences prefs = await _prefs;
     String email = await prefs.getString("email");
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/logout/";
+    String url = "http://rotary.syncronik.com/api/v1/auth/logout/";
     Map body = {"email": email};
     var jsonResponse;
     var res = await http.post(url, body: body);

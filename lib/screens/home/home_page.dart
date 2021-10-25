@@ -49,8 +49,7 @@ class _HomePageState extends State<HomePage> {
   logout() async {
     final SharedPreferences prefs = await _prefs;
     String email = await prefs.getString("email");
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/logout/";
+    String url = "http://rotary.syncronik.com/api/v1/auth/logout/";
     Map body = {"email": email};
     var jsonResponse;
     var res = await http.post(url, body: body);
@@ -80,8 +79,7 @@ class _HomePageState extends State<HomePage> {
     int user_id = await prefs.getInt("user_id");
     String token = await prefs.getString("token");
 
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${user_id}";
+    String url = "http://rotary.syncronik.com/api/v1/profile-pic/${user_id}";
     var jsonResponse;
     var res = await http.get(
       url,
@@ -162,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   image: DecorationImage(
                       image: userInfo.urlPicture != null
                           ? NetworkImage(
-                              "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                              "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
                           : AssetImage("assets/default-profile.png"),
                       fit: BoxFit.cover)),
             )

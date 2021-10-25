@@ -80,7 +80,7 @@ class _MyProfileState extends State<MyProfile> {
         backgroundColor: Colors.grey.shade800,
         backgroundImage: userInfo.urlPicture != ""
             ? NetworkImage(
-                "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
             : AssetImage("assets/default-profile.png"),
       );
 
@@ -113,7 +113,7 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Icon(Icons.place, color: Colors.grey),
                       SizedBox(width: 8.0),
-                      Text("${userInfo.address}",
+                      Text("Villahermosa, Tabasco",
                           style: TextStyle(fontSize: 16, color: Colors.grey)),
                     ],
                   ),

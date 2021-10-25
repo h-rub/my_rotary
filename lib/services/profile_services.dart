@@ -19,6 +19,6 @@ class ProfileServices {
   // }
   String switchPhoto() {
     String photo = loadURLPictureProfile();
-    return "https://morning-retreat-88403.herokuapp.com/media/${photo}";
+    return "http://rotary.syncronik.com/media/${photo}";
   }
 }

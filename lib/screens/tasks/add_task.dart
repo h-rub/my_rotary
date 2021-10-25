@@ -222,8 +222,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     var jsonResponse;
 
     final res = await http.post(
-      Uri.parse(
-          'https://morning-retreat-88403.herokuapp.com/api/v1/task/create'),
+      Uri.parse('http://rotary.syncronik.com/api/v1/task/create'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -308,7 +307,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             radius: 22,
             backgroundImage: userInfo.urlPicture != ""
                 ? NetworkImage(
-                    "https://morning-retreat-88403.herokuapp.com/media/${userInfo.urlPicture}")
+                    "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
                 : AssetImage("assets/default-profile.png"),
           ),
           SizedBox(

@@ -44,8 +44,7 @@ class _LoginState extends State<Login> {
   // Login API Call section
   signIn(String email, String password, userInfo) async {
     final SharedPreferences prefs = await _prefs;
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/login/";
+    String url = "http://rotary.syncronik.com/api/v1/auth/login/";
     Map body = {"email": email, "password": password};
     var jsonResponse;
     var res = await http.post(url, body: body);
@@ -72,7 +71,7 @@ class _LoginState extends State<Login> {
         userInfo.address = jsonResponse['address'];
 
         String urlPhoto =
-            "https://morning-retreat-88403.herokuapp.com/api/v1/profile-pic/${userInfo.uid}";
+            "http://rotary.syncronik.com/api/v1/profile-pic/${userInfo.uid}";
         var res_photo = await http.get(urlPhoto);
         var jsonResponsePicture = json.decode(res_photo.body);
         userInfo.urlPicture = jsonResponsePicture['picture'];

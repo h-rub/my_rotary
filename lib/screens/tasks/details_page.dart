@@ -266,8 +266,7 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
     var jsonResponse;
 
     final res = await http.post(
-      Uri.parse(
-          'https://morning-retreat-88403.herokuapp.com/api/v1/task/create'),
+      Uri.parse('http://rotary.syncronik.com/api/v1/task/create'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

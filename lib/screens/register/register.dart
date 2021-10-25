@@ -43,8 +43,7 @@ class _RegisterState extends State<Register> {
   signUp(String firstName, String lastName, String email, String password,
       String company, String address) async {
     final SharedPreferences prefs = await _prefs;
-    String url =
-        "https://morning-retreat-88403.herokuapp.com/api/v1/auth/singup/";
+    String url = "http://rotary.syncronik.com/api/v1/auth/singup/";
     Map body = {
       "first_name": firstName,
       "last_name": lastName,
