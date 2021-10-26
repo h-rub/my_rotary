@@ -9,6 +9,7 @@ class UserInfo with ChangeNotifier {
   String _address = "";
   String _biography = "";
   String _urlPicture = "";
+  String _phone = "";
 
   get firstName {
     return _firstName;
@@ -40,6 +41,10 @@ class UserInfo with ChangeNotifier {
 
   get urlPicture {
     return _urlPicture;
+  }
+
+  get phone {
+    return _phone;
   }
 
   set firstName(String firstName) {
@@ -79,6 +84,11 @@ class UserInfo with ChangeNotifier {
 
   set urlPicture(String urlPicture) {
     _urlPicture = urlPicture;
+    notifyListeners();
+  }
+
+  set phone(String phone) {
+    _phone = phone;
     notifyListeners();
   }
 }

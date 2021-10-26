@@ -69,16 +69,21 @@ class _LoginState extends State<Login> {
         userInfo.email = jsonResponse['email'];
         userInfo.company = jsonResponse['company'];
         userInfo.address = jsonResponse['address'];
+        userInfo.phone = jsonResponse['phone'];
 
         String urlPhoto =
             "http://rotary.syncronik.com/api/v1/profile-pic/${userInfo.uid}";
         var res_photo = await http.get(urlPhoto);
-        var jsonResponsePicture = json.decode(res_photo.body);
-        userInfo.urlPicture = jsonResponsePicture['picture'];
-        print("Picture User info: ${userInfo.urlPicture}");
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-            (Route<dynamic> route) => false);
+        try {
+          var jsonResponsePicture = json.decode(res_photo.body);
+          userInfo.urlPicture = jsonResponsePicture['picture'];
+          print("Picture User info: ${userInfo.urlPicture}");
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+              (Route<dynamic> route) => false);
+        } catch (e) {
+          Navigator.of(context).pushNamed('/wait');
+        }
       }
     } else if (res.statusCode == 401) {
       setState(() {
@@ -89,6 +94,13 @@ class _LoginState extends State<Login> {
     } else if (res.statusCode == 500) {
       print("Error del servidor");
     }
+  }
+
+  bool _passwordVisible = false;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
   }
 
   @override
@@ -146,12 +158,25 @@ class _LoginState extends State<Login> {
                   color: Color(0xfff5f5f5),
                   child: TextFormField(
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: !_passwordVisible,
                     style: TextStyle(color: Colors.black, fontFamily: 'SFPro'),
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Contraseña',
                         prefixIcon: Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            // Update the state i.e. toogle the state of passwordVisible variable
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
                         labelStyle: TextStyle(fontSize: 17)),
                   ),
                 ),

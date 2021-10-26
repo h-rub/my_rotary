@@ -21,6 +21,7 @@ import 'screens/settings/settings_page.dart';
 import 'screens/tasks/detail_task.dart';
 import 'screens/tasks/details_page.dart';
 import 'screens/tasks/tasks_page.dart';
+import 'screens/wait/wait_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
           '/addTask': (context) => AddTaskPage(),
           '/myTasks': (context) => MyTasksPage(),
           '/test': (context) => TestPage(),
-          '/detail': (context) => DetailsPageTask()
+          '/detail': (context) => DetailsPageTask(),
+          '/wait': (context) => WaitPage(),
         },
       ),
     );

@@ -113,7 +113,7 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Icon(Icons.place, color: Colors.grey),
                       SizedBox(width: 8.0),
-                      Text("Villahermosa, Tabasco",
+                      Text("${userInfo.address}",
                           style: TextStyle(fontSize: 16, color: Colors.grey)),
                     ],
                   ),
@@ -122,7 +122,7 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Icon(Icons.phone, color: Colors.grey),
                       SizedBox(width: 8.0),
-                      Text("9371303699",
+                      Text("${userInfo.phone}",
                           style: TextStyle(fontSize: 16, color: Colors.grey)),
                     ],
                   ),

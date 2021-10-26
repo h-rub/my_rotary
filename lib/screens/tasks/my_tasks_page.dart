@@ -48,10 +48,12 @@ class _MyTasksPageState extends State<MyTasksPage> {
   // Shared Preferennces
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  loadMyTasks(int myUserID) async {
+  loadMyTasks() async {
     final SharedPreferences prefs = await _prefs;
+    int user_id = await prefs.getInt("user_id");
     String token = await prefs.getString("token");
-    String url = "http://rotary.syncronik.com/api/v1/tasks?user=${myUserID}";
+    String url = "http://rotary.syncronik.com/api/v1/tasks?user=${user_id}";
+    print(url);
     var jsonResponse;
     var res = await http.get(
       url,
@@ -65,7 +67,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
       String source = Utf8Decoder().convert(res.bodyBytes);
       jsonResponse = json.decode(source);
       // print("Status code ${res.statusCode}");
-      // print("Response JSON ${jsonResponse}");
+      print("Response JSON ${jsonResponse}");
       setState(() {
         isLoading = !isLoading;
         data = new List.from(jsonResponse.reversed);
@@ -88,7 +90,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
   @override
   void initState() {
     super.initState();
-    loadMyTasks(1);
+    loadMyTasks();
   }
 
   @override
@@ -204,14 +206,14 @@ class _MyTasksPageState extends State<MyTasksPage> {
                                                     child: CircleAvatar(
                                                       radius: 22,
                                                       backgroundImage: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
+                                                          "http://rotary.syncronik.com/media/${data[position]['user_asigned_to']['picture']}"),
                                                     ),
                                                   ),
                                                   SizedBox(
                                                     width: 10.0,
                                                   ),
                                                   Text(
-                                                      "${data[position]['user_asigned_to']}",
+                                                      "${data[position]['user_asigned_to']['full_name']}",
                                                       style: TextStyle(
                                                           fontSize: 16)),
                                                   SizedBox(width: _separator),
@@ -249,7 +251,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
                   setState(() {
                     isLoading = true;
                   });
-                  loadMyTasks(1);
+                  loadMyTasks();
                 },
                 builder: (
                   BuildContext context,
@@ -369,7 +371,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
               builder: (BuildContext context) => TasksPage()),
           ModalRoute.withName('/tasks'),
         );
-        loadMyTasks(1);
+        loadMyTasks();
         if (jsonResponse != Null) {}
       } else if (res.statusCode == 401) {
         print("Error de autenticación");

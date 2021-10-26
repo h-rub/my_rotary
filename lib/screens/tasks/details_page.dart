@@ -77,7 +77,7 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
     //_startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
-      appBar: _appBar(userInfo),
+      appBar: _appBar(userInfo, taskInfo),
       bottomNavigationBar: SizedBox(
         height: 80.0,
         child: Material(
@@ -331,11 +331,11 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
     ]);
   }
 
-  _appBar(userInfo) {
+  _appBar(userInfo, taskInfo) {
     return AppBar(
         brightness: context.theme.brightness,
         title: Text(
-          "Tarea #",
+          "Tarea #${taskInfo.id}",
           style: headingTextStyle,
         ),
         elevation: 4,

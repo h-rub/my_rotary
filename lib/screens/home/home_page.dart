@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: userInfo.urlPicture != null
+                      image: userInfo.urlPicture != ""
                           ? NetworkImage(
                               "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
                           : AssetImage("assets/default-profile.png"),

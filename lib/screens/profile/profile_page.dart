@@ -190,28 +190,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             alignment: Alignment.topCenter),
                       ),
                     ),
-                    Positioned(
-                        bottom: 155,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 0,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                            color: primaryColor,
-                          ),
-                          child: IconButton(
-                            onPressed: () => getImage(userInfo),
-                            icon: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )),
+                    // Positioned(
+                    //     bottom: 155,
+                    //     right: 0,
+                    //     child: Container(
+                    //       height: 40,
+                    //       width: 40,
+                    //       decoration: BoxDecoration(
+                    //         shape: BoxShape.circle,
+                    //         border: Border.all(
+                    //           width: 0,
+                    //           color: Theme.of(context).scaffoldBackgroundColor,
+                    //         ),
+                    //         color: primaryColor,
+                    //       ),
+                    //       child: IconButton(
+                    //         onPressed: () => getImage(userInfo),
+                    //         icon: Icon(
+                    //           Icons.edit,
+                    //           color: Colors.white,
+                    //         ),
+                    //       ),
+                    //     )),
                   ],
                 ),
                 Padding(

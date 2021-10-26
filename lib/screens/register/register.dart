@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_rotary/screens/login/login.dart';
+import 'package:my_rotary/screens/wait/wait_page.dart';
 import 'package:my_rotary/utils/alert_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class _RegisterState extends State<Register> {
   TextEditingController _password_Controller = TextEditingController();
   TextEditingController _company_Controller = TextEditingController();
   TextEditingController _address_Controller = TextEditingController();
+  TextEditingController _phone_Controller = TextEditingController();
 
   // Shared Preferencess
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -41,7 +43,7 @@ class _RegisterState extends State<Register> {
 
   // Login API Call section
   signUp(String firstName, String lastName, String email, String password,
-      String company, String address) async {
+      String company, String address, String phone) async {
     final SharedPreferences prefs = await _prefs;
     String url = "http://rotary.syncronik.com/api/v1/auth/singup/";
     Map body = {
@@ -50,7 +52,8 @@ class _RegisterState extends State<Register> {
       "email": email,
       "password": password,
       "company": company,
-      "address": address
+      "address": address,
+      "phone": phone
     };
     var jsonResponse;
     var res = await http.post(url, body: body);
@@ -67,12 +70,19 @@ class _RegisterState extends State<Register> {
         });
         //prefs.setString("token", jsonResponse['token']);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            MaterialPageRoute(builder: (BuildContext context) => WaitPage()),
             (Route<dynamic> route) => false);
       }
     } else if (res.statusCode == 500) {
       print("Error del servidor");
     }
+  }
+
+  bool _passwordVisible = false;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
   }
 
   @override
@@ -140,6 +150,7 @@ class _RegisterState extends State<Register> {
                   child: Container(
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _email_Controller,
                       style:
                           TextStyle(color: Colors.black, fontFamily: 'SFPro'),
@@ -156,7 +167,7 @@ class _RegisterState extends State<Register> {
                   child: Container(
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
-                      obscureText: true,
+                      obscureText: !_passwordVisible,
                       controller: _password_Controller,
                       style:
                           TextStyle(color: Colors.black, fontFamily: 'SFPro'),
@@ -164,6 +175,36 @@ class _RegisterState extends State<Register> {
                           border: InputBorder.none,
                           labelText: 'Contraseña',
                           prefixIcon: Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              // Update the state i.e. toogle the state of passwordVisible variable
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          ),
+                          labelStyle: TextStyle(fontSize: 17)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  child: Container(
+                    color: Color(0xfff5f5f5),
+                    child: TextFormField(
+                      keyboardType: TextInputType.phone,
+                      controller: _phone_Controller,
+                      style:
+                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Teléfono',
+                          prefixIcon: Icon(Icons.phone),
                           labelStyle: TextStyle(fontSize: 17)),
                     ),
                   ),
@@ -220,7 +261,8 @@ class _RegisterState extends State<Register> {
                               _email_Controller.text,
                               _password_Controller.text,
                               _company_Controller.text,
-                              _address_Controller.text);
+                              _address_Controller.text,
+                              _phone_Controller.text);
                     }, //since this is only a UI app
                     child: Text(
                       'Crear cuenta',

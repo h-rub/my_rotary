@@ -6,7 +6,7 @@ const Color bluishClr = Color(0xFF4e5ae8);
 const Color yellowClr = Color(0xFFFFB746);
 const Color pinkClr = Color(0xFFff4667);
 const Color white = Colors.white;
-const primaryClr = bluishClr;
+const primaryClr = Color.fromRGBO(23, 69, 143, 1);
 final Color darkGreyClr = Color.fromRGBO(11, 16, 38, 1);
 Color darkHeaderClr = Colors.grey[800];
 

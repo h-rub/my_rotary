@@ -179,6 +179,7 @@ class _TasksPageState extends State<TasksPage> {
                                   print('testing');
                                   print(data[position]);
                                   taskInfo.title = data[position]['title'];
+                                  taskInfo.id = data[position]['_id_task'];
                                   Navigator.of(context).pushNamed('/detail');
                                 },
                                 child: Container(
@@ -240,14 +241,14 @@ class _TasksPageState extends State<TasksPage> {
                                                     child: CircleAvatar(
                                                       radius: 22,
                                                       backgroundImage: NetworkImage(
-                                                          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"),
+                                                          "http://rotary.syncronik.com/media/${data[position]['user_asigned_to']['picture']}"),
                                                     ),
                                                   ),
                                                   SizedBox(
                                                     width: 10.0,
                                                   ),
                                                   Text(
-                                                      "${data[position]['user_asigned_to']}",
+                                                      "${data[position]['user_asigned_to']['full_name']}",
                                                       style: TextStyle(
                                                           fontSize: 16)),
                                                   SizedBox(width: _separator),
