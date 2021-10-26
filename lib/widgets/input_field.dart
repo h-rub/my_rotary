@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_rotary/theme.dart';
 
-class InputField extends StatelessWidget {
+class InputField extends StatefulWidget {
   final String title;
   final TextEditingController controller;
   final String hint;
@@ -20,6 +20,11 @@ class InputField extends StatelessWidget {
       this.isDescription});
 
   @override
+  _InputFieldState createState() => _InputFieldState();
+}
+
+class _InputFieldState extends State<InputField> {
+  @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top: 16.0),
@@ -27,7 +32,7 @@ class InputField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              widget.title,
               style: titleTextStle,
             ),
             SizedBox(
@@ -35,7 +40,7 @@ class InputField extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(left: 14.0),
-              height: isDescription ? 104 : 52,
+              height: widget.isDescription ? 104 : 52,
               decoration: BoxDecoration(
                   border: Border.all(
                     width: 1.0,
@@ -47,7 +52,7 @@ class InputField extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextFormField(
-                      keyboardType: isDescription
+                      keyboardType: widget.isDescription
                           ? TextInputType.multiline
                           : TextInputType.text,
                       minLines: 1,
@@ -55,11 +60,11 @@ class InputField extends StatelessWidget {
                       autofocus: false,
                       cursorColor:
                           Get.isDarkMode ? Colors.grey[100] : Colors.grey[600],
-                      readOnly: isReadOnly == null ? false : true,
-                      controller: controller,
+                      readOnly: widget.isReadOnly == null ? false : true,
+                      controller: widget.controller,
                       style: subTitleTextStle,
                       decoration: InputDecoration(
-                        hintText: hint,
+                        hintText: widget.hint,
                         hintStyle: subTitleTextStle,
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -76,7 +81,7 @@ class InputField extends StatelessWidget {
                       ),
                     ),
                   ),
-                  widget == null ? Container() : widget,
+                  widget.widget == null ? Container() : widget.widget,
                 ],
               ),
             )

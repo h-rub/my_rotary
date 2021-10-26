@@ -66,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: 'Apariencia',
             tiles: [
               SettingsTile.switchTile(
-                title: 'Modo Oscuro',
+                title: 'Modo Oscuro (Beta)',
                 leading: Icon(FlutterIcons.moon_fea),
                 switchValue: isSwitched,
                 onToggle: (bool value) {

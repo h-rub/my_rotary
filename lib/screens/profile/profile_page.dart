@@ -78,7 +78,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
   }
 
-  @override
   Future sendFiletodjango(File file, userInfo) async {
     final SharedPreferences prefs = await _prefs;
     var endPoint = "http://rotary.syncronik.com/api/v1/profile-pic/${_user_id}";
@@ -175,209 +174,205 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ]),
       body: Container(
         //padding: EdgeInsets.only(left: 25, right: 20, bottom: 20, top: 35),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(children: [
-            Stack(
-              children: [
-                Stack(
+
+        child: ListView(children: [
+          Stack(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/bg-profile.jpg'),
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.topCenter),
+                    ),
+                  ),
+                  // Positioned(
+                  //     bottom: 155,
+                  //     right: 0,
+                  //     child: Container(
+                  //       height: 40,
+                  //       width: 40,
+                  //       decoration: BoxDecoration(
+                  //         shape: BoxShape.circle,
+                  //         border: Border.all(
+                  //           width: 0,
+                  //           color: Theme.of(context).scaffoldBackgroundColor,
+                  //         ),
+                  //         color: primaryColor,
+                  //       ),
+                  //       child: IconButton(
+                  //         onPressed: () => getImage(userInfo),
+                  //         icon: Icon(
+                  //           Icons.edit,
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     )),
+                ],
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.only(top: 120, bottom: 22, left: 22, right: 22),
+                child: Column(
                   children: [
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/bg-profile.jpg'),
-                            fit: BoxFit.fitWidth,
-                            alignment: Alignment.topCenter),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 130,
+                            height: 130,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.1),
+                                      offset: Offset(0, 10))
+                                ],
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: userInfo.urlPicture != ""
+                                      ? NetworkImage(
+                                          "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
+                                      : AssetImage(
+                                          "assets/default-profile.png"),
+                                  //NetworkImage(
+                                  //"https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
+                                )),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 0,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  color: primaryColor,
+                                ),
+                                child: IconButton(
+                                  onPressed: () => getImage(userInfo),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )),
+                        ],
                       ),
                     ),
-                    // Positioned(
-                    //     bottom: 155,
-                    //     right: 0,
-                    //     child: Container(
-                    //       height: 40,
-                    //       width: 40,
-                    //       decoration: BoxDecoration(
-                    //         shape: BoxShape.circle,
-                    //         border: Border.all(
-                    //           width: 0,
-                    //           color: Theme.of(context).scaffoldBackgroundColor,
-                    //         ),
-                    //         color: primaryColor,
-                    //       ),
-                    //       child: IconButton(
-                    //         onPressed: () => getImage(userInfo),
-                    //         icon: Icon(
-                    //           Icons.edit,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     )),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: 120, bottom: 22, left: 22, right: 22),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 4,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        spreadRadius: 2,
-                                        blurRadius: 10,
-                                        color: Colors.black.withOpacity(0.1),
-                                        offset: Offset(0, 10))
-                                  ],
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: userInfo.urlPicture != ""
-                                        ? NetworkImage(
-                                            "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
-                                        : AssetImage(
-                                            "assets/default-profile.png"),
-                                    //NetworkImage(
-                                    //"https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                                  )),
-                            ),
-                            Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 0,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
-                                    color: primaryColor,
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () => getImage(userInfo),
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      InputField(
-                        title: "Nombre",
-                        hint: "Ingresa tu nombre",
-                        isDescription: false,
-                        controller: _firstNameController,
-                      ),
-                      InputField(
-                        title: "Apellido",
-                        hint: "Ingresa tu apellido",
-                        isDescription: false,
-                        controller: _lastNameController,
-                      ),
-                      InputField(
-                        title: "E-mail",
-                        hint: "Ingresa tu correo",
-                        isDescription: false,
-                        controller: _emailController,
-                      ),
-                      InputField(
-                        title: "Teléfono",
-                        hint: "Ingresa tu téléfono",
-                        isDescription: false,
-                        controller: _phoneController,
-                      ),
-                      InputField(
-                        title: "Compañia",
-                        hint: "Ingresa tu compañia",
-                        isDescription: false,
-                        controller: _companyController,
-                      ),
-                      InputField(
-                        title: "Dirección",
-                        hint: "Ingresa tu dirección",
-                        isDescription: false,
-                        controller: _adressController,
-                      ),
-                      InputField(
-                        title: "Biografía",
-                        hint: "Cuéntanos un poco sobre ti",
-                        isDescription: true,
-                        controller: _biographyController,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          OutlineButton(
-                            color: context.theme.backgroundColor,
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Text("CANCELAR",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    letterSpacing: 2.2,
-                                    color: Colors.black)),
-                          ),
-                          RaisedButton(
-                            onPressed: () {
-                              updateProfile(
-                                  context,
-                                  userInfo,
-                                  _firstNameController.text,
-                                  _lastNameController.text,
-                                  _emailController.text,
-                                  _phoneController.text,
-                                  _companyController.text,
-                                  _adressController.text,
-                                  _biographyController.text);
-                            },
-                            color: primaryColor,
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              "GUARDAR",
+                    SizedBox(
+                      height: 15,
+                    ),
+                    InputField(
+                      title: "Nombre",
+                      hint: "Ingresa tu nombre",
+                      isDescription: false,
+                      controller: _firstNameController,
+                    ),
+                    InputField(
+                      title: "Apellido",
+                      hint: "Ingresa tu apellido",
+                      isDescription: false,
+                      controller: _lastNameController,
+                    ),
+                    InputField(
+                      title: "E-mail",
+                      hint: "Ingresa tu correo",
+                      isDescription: false,
+                      controller: _emailController,
+                    ),
+                    InputField(
+                      title: "Teléfono",
+                      hint: "Ingresa tu téléfono",
+                      isDescription: false,
+                      controller: _phoneController,
+                    ),
+                    InputField(
+                      title: "Compañia",
+                      hint: "Ingresa tu compañia",
+                      isDescription: false,
+                      controller: _companyController,
+                    ),
+                    InputField(
+                      title: "Dirección",
+                      hint: "Ingresa tu dirección",
+                      isDescription: false,
+                      controller: _adressController,
+                    ),
+                    InputField(
+                      title: "Biografía",
+                      hint: "Cuéntanos un poco sobre ti",
+                      isDescription: true,
+                      controller: _biographyController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OutlineButton(
+                          color: context.theme.backgroundColor,
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text("CANCELAR",
                               style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
-                                  color: Colors.white),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ]),
-        ),
+                                  color: Colors.black)),
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            updateProfile(
+                                context,
+                                userInfo,
+                                _firstNameController.text,
+                                _lastNameController.text,
+                                _emailController.text,
+                                _phoneController.text,
+                                _companyController.text,
+                                _adressController.text,
+                                _biographyController.text);
+                          },
+                          color: primaryColor,
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(
+                            "GUARDAR",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.white),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ]),
       ),
     );
   }
