@@ -61,6 +61,64 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
     super.dispose();
   }
 
+  showAlertDialog(BuildContext context, int position, String taskTitle) {
+    deleteTask() async {
+      String url = "http://rotary.syncronik.com/api/v1/task/delete/${position}";
+      var jsonResponse;
+      var res = await http.get(
+        url,
+      );
+
+      if (res.statusCode == 200) {
+        String source = Utf8Decoder().convert(res.bodyBytes);
+        jsonResponse = json.decode(source);
+        print("Status code ${res.statusCode}");
+        print("Response JSON ${jsonResponse}");
+        Navigator.of(context).popAndPushNamed('/tasks');
+
+        if (jsonResponse != Null) {}
+      } else if (res.statusCode == 401) {
+        print("Error de autenticación");
+      } else if (res.statusCode == 500) {
+        print("Error del servidor");
+      }
+    }
+
+    // set up the button
+    Widget deleteButton = TextButton(
+      child: Text("Eliminar", style: TextStyle(color: Colors.red)),
+      onPressed: () {
+        deleteTask();
+      },
+    );
+
+    Widget cancel = TextButton(
+      child: Text("Cancelar"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Eliminar tarea"),
+      content:
+          Text("¿Estás seguro que deseas eliminar la tarea '${taskTitle}'?"),
+      actions: [
+        cancel,
+        deleteButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final userInfo = Provider.of<UserInfo>(context);
@@ -92,7 +150,8 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
               children: [
                 TextButton(
                   onPressed: () {
-                    print("Marcando la tarea como completado");
+                    print("Eliminando tarea");
+                    showAlertDialog(context, taskInfo.id, taskInfo.title);
                     //Navigator.pop(context);
                   },
                   child: Text(
@@ -108,13 +167,21 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                     print("Marcando la tarea como completado");
                     //Navigator.pop(context);
                   },
-                  child: Text(
-                    'Marcar como completado',
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child: taskInfo.isCompleted
+                      ? Text(
+                          'Marcar como no completado',
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Text(
+                          'Marcar como completado',
+                          style: TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -128,7 +195,22 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 8,
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  taskInfo.isCompleted
+                      ? Text(
+                          "Tarea completada",
+                          style: TextStyle(
+                              color: Colors.green, fontWeight: FontWeight.w600),
+                        )
+                      : Text("Tarea aún no completada",
+                          style: TextStyle(
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.w600)),
+                ],
               ),
               InputField(
                   title: "Título",
@@ -138,7 +220,7 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                   isReadOnly: true),
               InputField(
                   title: "Descripción",
-                  hint: "Ingresa una descripción",
+                  hint: taskInfo.description,
                   isDescription: true,
                   controller: _descController,
                   isReadOnly: true),
@@ -149,7 +231,8 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                       isReadOnly: true,
                       title: "Fecha límite",
                       isDescription: false,
-                      hint: DateFormat("dd/MM/yyyy").format(_selectedDate),
+                      hint: DateFormat("dd/MM/yyyy").format(
+                          DateFormat("yyyy-MM-dd").parse(taskInfo.dueDate)),
                       widget: IconButton(
                         icon: (Icon(
                           FlutterIcons.calendar_ant,
@@ -162,33 +245,33 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: InputField(
-                      isReadOnly: true,
-                      title: "Hora de fin",
-                      isDescription: false,
-                      hint: _startTime,
-                      widget: IconButton(
-                        icon: (Icon(
-                          FlutterIcons.clock_faw5,
-                          color: Colors.grey,
-                        )),
-                        onPressed: () {
-                          _getTimeFromUser(isStartTime: true);
-                        },
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  // Expanded(
+                  //   child: InputField(
+                  //     isReadOnly: true,
+                  //     title: "Hora de fin",
+                  //     isDescription: false,
+                  //     hint: _startTime,
+                  //     widget: IconButton(
+                  //       icon: (Icon(
+                  //         FlutterIcons.clock_faw5,
+                  //         color: Colors.grey,
+                  //       )),
+                  //       onPressed: () {
+                  //         _getTimeFromUser(isStartTime: true);
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               InputField(
                 isReadOnly: true,
                 title: "Asignado a",
                 isDescription: false,
-                hint: _selectedRemind,
+                hint: taskInfo.full_name_assigned_to,
                 widget: Row(
                   children: [
                     DropdownButton<String>(

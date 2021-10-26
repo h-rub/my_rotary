@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:my_rotary/providers/task_info.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/tasks/tasks_page.dart';
 import 'package:my_rotary/utils/utils.dart';
@@ -125,6 +126,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
   @override
   Widget build(BuildContext context) {
     final userInfo = Provider.of<UserInfo>(context);
+    final taskInfo = Provider.of<TaskInfo>(context);
     double _width = MediaQuery.of(context).size.width - 40;
     double _height = MediaQuery.of(context).size.width;
     double _separator = _width / 7.5;
@@ -147,6 +149,17 @@ class _MyTasksPageState extends State<MyTasksPage> {
                                 onTap: () {
                                   print('testing');
                                   print(data[position]);
+                                  taskInfo.title = data[position]['title'];
+                                  taskInfo.description =
+                                      data[position]['description'];
+                                  taskInfo.id = data[position]['_id_task'];
+                                  taskInfo.dueDate = data[position]['due_date'];
+                                  taskInfo.full_name_assigned_to =
+                                      data[position]['user_asigned_to']
+                                          ['full_name'];
+                                  taskInfo.isCompleted =
+                                      data[position]['is_completed'];
+                                  Navigator.of(context).pushNamed('/detail');
                                 },
                                 child: Container(
                                   margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -161,7 +174,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
                                         Container(
                                           color: data[position]['is_completed']
                                               ? Colors.green
-                                              : Colors.yellow,
+                                              : Colors.indigo,
                                           width: 10,
                                         ),
                                         SizedBox(

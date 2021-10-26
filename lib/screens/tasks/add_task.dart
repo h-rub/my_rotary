@@ -135,26 +135,26 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: InputField(
-                      title: "Hora de fin",
-                      isDescription: false,
-                      hint: _startTime,
-                      widget: IconButton(
-                        icon: (Icon(
-                          FlutterIcons.clock_faw5,
-                          color: Colors.grey,
-                        )),
-                        onPressed: () {
-                          _getTimeFromUser(isStartTime: true);
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  // Expanded(
+                  //   child: InputField(
+                  //     title: "Hora de fin",
+                  //     isDescription: false,
+                  //     hint: _startTime,
+                  //     widget: IconButton(
+                  //       icon: (Icon(
+                  //         FlutterIcons.clock_faw5,
+                  //         color: Colors.grey,
+                  //       )),
+                  //       onPressed: () {
+                  //         _getTimeFromUser(isStartTime: true);
+                  //         setState(() {});
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               InputField(

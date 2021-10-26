@@ -180,7 +180,15 @@ class _TasksPageState extends State<TasksPage> {
                                   print('testing');
                                   print(data[position]);
                                   taskInfo.title = data[position]['title'];
+                                  taskInfo.description =
+                                      data[position]['description'];
                                   taskInfo.id = data[position]['_id_task'];
+                                  taskInfo.dueDate = data[position]['due_date'];
+                                  taskInfo.full_name_assigned_to =
+                                      data[position]['user_asigned_to']
+                                          ['full_name'];
+                                  taskInfo.isCompleted =
+                                      data[position]['is_completed'];
                                   Navigator.of(context).pushNamed('/detail');
                                 },
                                 child: Container(
@@ -196,7 +204,7 @@ class _TasksPageState extends State<TasksPage> {
                                         Container(
                                           color: data[position]['is_completed']
                                               ? Colors.green
-                                              : Colors.yellow,
+                                              : Colors.indigo,
                                           width: 10,
                                         ),
                                         SizedBox(
