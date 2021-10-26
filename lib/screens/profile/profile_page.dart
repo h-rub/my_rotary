@@ -143,6 +143,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     TextEditingController _biographyController =
         TextEditingController(text: userInfo.biography);
 
+    TextEditingController _phoneController =
+        TextEditingController(text: userInfo.phone);
+
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
@@ -297,6 +300,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         controller: _emailController,
                       ),
                       InputField(
+                        title: "Teléfono",
+                        hint: "Ingresa tu téléfono",
+                        isDescription: false,
+                        controller: _phoneController,
+                      ),
+                      InputField(
                         title: "Compañia",
                         hint: "Ingresa tu compañia",
                         isDescription: false,
@@ -336,7 +345,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              print(_firstNameController.text);
+                              updateProfile(
+                                  context,
+                                  userInfo,
+                                  _firstNameController.text,
+                                  _lastNameController.text,
+                                  _emailController.text,
+                                  _phoneController.text,
+                                  _companyController.text,
+                                  _adressController.text,
+                                  _biographyController.text);
                             },
                             color: primaryColor,
                             padding: EdgeInsets.symmetric(horizontal: 40),
@@ -362,5 +380,79 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       ),
     );
+  }
+}
+
+void showAlertDialogcontext(
+    BuildContext context, String title, String message) {
+  final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
+  showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text("${title}"),
+          content: Text(message),
+          actions: <Widget>[
+            RaisedButton(
+              color: primaryColor,
+              child: Text(
+                "Cerrar",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      });
+}
+
+Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+updateProfile(
+    BuildContext context,
+    userInfo,
+    String firstName,
+    String lastName,
+    String email,
+    String phone,
+    String company,
+    String address,
+    String biography) async {
+  final SharedPreferences prefs = await _prefs;
+  int id = await prefs.getInt('user_id');
+  String url = "http://rotary.syncronik.com/api/v1/profile/update";
+  Map body = {
+    "id": id.toString(),
+    "first_name": firstName,
+    "last_name": lastName,
+    "email": email,
+    "phone": phone,
+    "company": company,
+    "address": address,
+    "biography": biography,
+  };
+  var jsonResponse;
+  var res = await http.post(url, body: body);
+  print(firstName);
+  print(lastName);
+
+  if (res.statusCode == 200) {
+    jsonResponse = json.decode(res.body);
+    print("Status code ${res.statusCode}");
+    print("Response JSON ${res.body}");
+    userInfo.firstName = jsonResponse['first_name'];
+    userInfo.lastName = jsonResponse['last_name'];
+    userInfo.email = jsonResponse['email'];
+    userInfo.phone = jsonResponse['phone'];
+    userInfo.company = jsonResponse['company'];
+    userInfo.address = jsonResponse['address'];
+    userInfo.biography = jsonResponse['biography'];
+    // show the dialog
+    showAlertDialogcontext(context, "Perfil actualizado", jsonResponse['msg']);
+  } else {
+    print("Ocurrió un error");
+    print(res.body);
   }
 }

@@ -28,9 +28,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
   String _startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
 
   String _endTime = "9:30 AM";
+  String id_selected;
   int _selectedColor = 0;
 
-  String _selectedRemind = "Hever Rubio";
+  List list = [];
+
+  String _selectedRemind = "---------";
   List<String> remindList = [
     'Hever Rubio',
     'Jorge Estrada',
@@ -45,6 +48,38 @@ class _AddTaskPageState extends State<AddTaskPage> {
     'Weekly',
     'Monthly',
   ];
+
+  loadMembers() async {
+    String url = "http://rotary.syncronik.com/api/v1/members/all";
+    var jsonResponse;
+    var res = await http.get(
+      url,
+      headers: {'Content-Type': 'application/json; charset=utf-8'},
+    );
+
+    if (res.statusCode == 200) {
+      String source = Utf8Decoder().convert(res.bodyBytes);
+      jsonResponse = json.decode(source);
+      // print("Status code ${res.statusCode}");
+      // print("Response JSON ${jsonResponse}");
+      setState(() {
+        list = new List.from(jsonResponse.reversed);
+        print(list);
+      });
+      //print(data);
+      if (jsonResponse != Null) {}
+    } else if (res.statusCode == 401) {
+      print("Error de autenticación");
+    } else if (res.statusCode == 500) {
+      print("Error del servidor");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadMembers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +158,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ],
               ),
               InputField(
+                isReadOnly: true,
                 title: "Asignado a",
                 isDescription: false,
-                hint: "Hever Rubio",
+                hint: _selectedRemind,
                 widget: Row(
                   children: [
                     DropdownButton<String>(
@@ -139,15 +175,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         style: subTitleTextStle,
                         underline: Container(height: 0),
                         onChanged: (String newValue) {
+                          print(newValue);
                           setState(() {
                             _selectedRemind = newValue;
                           });
                         },
-                        items: remindList
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: list.map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
-                            value: value.toString(),
-                            child: Text(value.toString()),
+                            onTap: () {
+                              setState(() {
+                                id_selected = value['pk'].toString();
+                              });
+                            },
+                            value:
+                                "${value['first_name']} ${value['last_name']}"
+                                    .toString(),
+                            child: Text(
+                                "${value['first_name']} ${value['last_name']}"
+                                    .toString()),
                           );
                         }).toList()),
                     SizedBox(width: 6),
@@ -183,7 +228,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   _validateInputs() {
     if (_titleController.text.isNotEmpty && _descController.text.isNotEmpty) {
       _addTaskToDB(_titleController.text, _descController.text, _selectedDate,
-          _startTime);
+          _startTime, id_selected);
       //Get.back();
       Navigator.popAndPushNamed(context, '/tasks');
     } else if (_titleController.text.isEmpty || _descController.text.isEmpty) {
@@ -197,8 +242,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  _addTaskToDB(
-      titleContent, descriptionContent, selectedDate, _startTime) async {
+  _addTaskToDB(titleContent, descriptionContent, selectedDate, _startTime,
+      id_selected) async {
     // await _taskController.addTask(
     //   task: Task(
     //     note: _descController.text,
@@ -214,6 +259,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
     // );
     print("Añadiendo tarea");
     print("Hora que se agregó: ${_startTime}");
+
+    print("id ${id_selected}");
 
     var datetime_deadline = DateTime.parse(selectedDate.toString());
     var format_date =
@@ -232,7 +279,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
         'title': titleContent,
         'description': descriptionContent,
         'deadline': format_date,
-        'due_time': _startTime
+        'due_time': _startTime,
+        'id_assigned_to': id_selected
       }),
     );
     if (res.statusCode == 200) {
