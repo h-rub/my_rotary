@@ -7,10 +7,12 @@ enum SlidableAction { archive, done, more, delete }
 class SlidableWidget<T> extends StatelessWidget {
   final Widget child;
   final Function(SlidableAction action) onDismissed;
+  final bool isCompleted;
 
   const SlidableWidget({
     @required this.child,
     @required this.onDismissed,
+    @required this.isCompleted,
     Key key,
   }) : super(key: key);
 
@@ -21,12 +23,19 @@ class SlidableWidget<T> extends StatelessWidget {
 
         /// left side
         actions: <Widget>[
-          IconSlideAction(
-            caption: 'Completado',
-            color: Colors.indigo,
-            icon: Icons.done,
-            onTap: () => onDismissed(SlidableAction.done),
-          ),
+          isCompleted
+              ? IconSlideAction(
+                  caption: 'Completada',
+                  color: Colors.green,
+                  icon: Icons.done,
+                  onTap: () => onDismissed(SlidableAction.done),
+                )
+              : IconSlideAction(
+                  caption: 'Completar',
+                  color: Colors.indigo,
+                  icon: Icons.done,
+                  onTap: () => onDismissed(SlidableAction.done),
+                ),
         ],
 
         /// right side

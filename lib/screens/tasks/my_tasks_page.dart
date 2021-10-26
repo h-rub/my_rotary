@@ -142,6 +142,7 @@ class _MyTasksPageState extends State<MyTasksPage> {
                           itemCount: data.length,
                           itemBuilder: (context, position) {
                             return SlidableWidget(
+                              isCompleted: data[position]['is_completed'],
                               child: GestureDetector(
                                 onTap: () {
                                   print('testing');
@@ -240,7 +241,8 @@ class _MyTasksPageState extends State<MyTasksPage> {
                                   context,
                                   data[position]['_id_task'],
                                   data[position]['title'],
-                                  action),
+                                  action,
+                                  data[position]['is_completed']),
                             );
                           }),
                     ),
@@ -418,8 +420,109 @@ class _MyTasksPageState extends State<MyTasksPage> {
     );
   }
 
+  showCompletedTask(
+      BuildContext context, int position, String taskTitle, bool isComplete) {
+    print(isComplete);
+
+    notCompletedTask() async {
+      print("NO COMPLETANDO");
+      String url =
+          "http://rotary.syncronik.com/api/v1/task/notcomplete/${position}";
+      var jsonResponse;
+      Map notbody = {"is_completed": "False"};
+      var res = await http.post(url, body: notbody);
+
+      if (res.statusCode == 200) {
+        String source = Utf8Decoder().convert(res.bodyBytes);
+        jsonResponse = json.decode(source);
+        print("Status code ${res.statusCode}");
+        print("Response JSON ${jsonResponse}");
+        Navigator.of(context).pop();
+        setState(() {
+          isLoading = true;
+        });
+        loadMyTasks();
+        if (jsonResponse != Null) {}
+      } else if (res.statusCode == 401) {
+        print("Error de autenticación");
+      } else if (res.statusCode == 500) {
+        print("Error del servidor");
+      }
+    }
+
+    completedTask() async {
+      String url =
+          "http://rotary.syncronik.com/api/v1/task/complete/${position}";
+      var jsonResponse;
+      Map body = {"is_completed": "True"};
+      var res = await http.post(url, body: body);
+
+      if (res.statusCode == 200) {
+        String source = Utf8Decoder().convert(res.bodyBytes);
+        jsonResponse = json.decode(source);
+        print("Status code ${res.statusCode}");
+        print("Response JSON ${jsonResponse}");
+        Navigator.of(context).pop();
+        setState(() {
+          isLoading = true;
+        });
+        loadMyTasks();
+        if (jsonResponse != Null) {}
+      } else if (res.statusCode == 401) {
+        print("Error de autenticación");
+      } else if (res.statusCode == 500) {
+        print("Error del servidor");
+      }
+    }
+
+    // set up the button
+    Widget completedButton = TextButton(
+      child: Text("Completar", style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        completedTask();
+      },
+    );
+    Widget notCompletedButton = TextButton(
+      child: Text("Confirmar", style: TextStyle(color: Colors.red)),
+      onPressed: () {
+        notCompletedTask();
+      },
+    );
+
+    Widget cancel = TextButton(
+      child: Text("Cancelar"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog completedAlert = AlertDialog(
+      title: isComplete
+          ? Text("Marcar como no completada")
+          : Text("Completar tarea"),
+      content: isComplete
+          ? Text(
+              "¿Estás seguro que deseas marcar como no completada la tarea '${taskTitle}'?")
+          : Text(
+              "¿Estás seguro que deseas marcar como completada la tarea '${taskTitle}'?"),
+      actions: [
+        cancel,
+        isComplete ? notCompletedButton : completedButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return completedAlert;
+      },
+    );
+  }
+
   void dismissSlidableItem(BuildContext context, int position, String taskTitle,
-      SlidableAction action) {
+      SlidableAction action, bool isComplete) {
     setState(() {});
 
     switch (action) {
@@ -427,7 +530,8 @@ class _MyTasksPageState extends State<MyTasksPage> {
         Utils.showSnackBar(context, 'Chat has been archived');
         break;
       case SlidableAction.done:
-        Utils.showSnackBar(context, 'Tarea marcada como completada');
+        //Utils.showSnackBar(context, 'Tarea marcada como completada');
+        showCompletedTask(context, position, taskTitle, isComplete);
         break;
       case SlidableAction.more:
         Utils.showSnackBar(context, 'Selected more');
