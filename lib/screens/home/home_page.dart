@@ -152,17 +152,22 @@ class _HomePageState extends State<HomePage> {
                     logout();
                   }),
             ),
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: userInfo.urlPicture != ""
-                          ? NetworkImage(
-                              "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
-                          : AssetImage("assets/default-profile.png"),
-                      fit: BoxFit.cover)),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/me');
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: userInfo.urlPicture != ""
+                            ? NetworkImage(
+                                "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
+                            : AssetImage("assets/default-profile.png"),
+                        fit: BoxFit.cover)),
+              ),
             )
           ],
         ),
@@ -176,11 +181,18 @@ Widget Dashboard(String first_name, context) {
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
 
   Items item1 = new Items(
-      title: "Mi perfil",
-      subtitle: "Personaliza tu perfil",
+      title: "Mi club",
+      subtitle: "Sierra Madre",
       color: Colors.red,
-      img: "assets/user.png",
-      page: "/me");
+      img: "assets/club.png",
+      page: "/my-club");
+
+  // Items item5 = new Items(
+  //     title: "Mi club",
+  //     subtitle: "Sierra Madre",
+  //     color: Colors.red,
+  //     img: "assets/user.png",
+  //     page: "/me");
 
   Items item2 = new Items(
       title: "Tareas",
@@ -193,7 +205,7 @@ Widget Dashboard(String first_name, context) {
       subtitle: "Próximamente",
       color: Colors.orange,
       img: "assets/cabina-de-votacion.png",
-      page: "voting");
+      page: "/polls-demo");
   Items item4 = new Items(
       title: "Eventos",
       subtitle: "Proximamente",

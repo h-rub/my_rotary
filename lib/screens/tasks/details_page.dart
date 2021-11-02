@@ -165,6 +165,8 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                 TextButton(
                   onPressed: () {
                     print("Marcando la tarea como completado");
+                    showCompletedTask(context, taskInfo.id, taskInfo.title,
+                        taskInfo.isCompleted);
                     //Navigator.pop(context);
                   },
                   child: taskInfo.isCompleted
@@ -488,5 +490,106 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
         _selectedDate = _pickedDate;
       });
     }
+  }
+
+  showCompletedTask(
+      BuildContext context, int position, String taskTitle, bool isComplete) {
+    print(isComplete);
+
+    notCompletedTask() async {
+      print("NO COMPLETANDO");
+      String url =
+          "http://rotary.syncronik.com/api/v1/task/notcomplete/${position}";
+      var jsonResponse;
+      Map notbody = {"is_completed": "False"};
+      var res = await http.post(url, body: notbody);
+
+      if (res.statusCode == 200) {
+        String source = Utf8Decoder().convert(res.bodyBytes);
+        jsonResponse = json.decode(source);
+        print("Status code ${res.statusCode}");
+        print("Response JSON ${jsonResponse}");
+        Navigator.of(context).pop();
+        setState(() {
+          //isLoading = true;
+        });
+        //loadTasks();
+        if (jsonResponse != Null) {}
+      } else if (res.statusCode == 401) {
+        print("Error de autenticación");
+      } else if (res.statusCode == 500) {
+        print("Error del servidor");
+      }
+    }
+
+    completedTask() async {
+      String url =
+          "http://rotary.syncronik.com/api/v1/task/complete/${position}";
+      var jsonResponse;
+      Map body = {"is_completed": "True"};
+      var res = await http.post(url, body: body);
+
+      if (res.statusCode == 200) {
+        String source = Utf8Decoder().convert(res.bodyBytes);
+        jsonResponse = json.decode(source);
+        print("Status code ${res.statusCode}");
+        print("Response JSON ${jsonResponse}");
+        Navigator.of(context).pop();
+        setState(() {
+          //isLoading = true;
+        });
+        //loadTasks();
+        if (jsonResponse != Null) {}
+      } else if (res.statusCode == 401) {
+        print("Error de autenticación");
+      } else if (res.statusCode == 500) {
+        print("Error del servidor");
+      }
+    }
+
+    // set up the button
+    Widget completedButton = TextButton(
+      child: Text("Completar", style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        completedTask();
+      },
+    );
+    Widget notCompletedButton = TextButton(
+      child: Text("Confirmar", style: TextStyle(color: Colors.red)),
+      onPressed: () {
+        notCompletedTask();
+      },
+    );
+
+    Widget cancel = TextButton(
+      child: Text("Cancelar"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog completedAlert = AlertDialog(
+      title: isComplete
+          ? Text("Marcar como no completada")
+          : Text("Completar tarea"),
+      content: isComplete
+          ? Text(
+              "¿Estás seguro que deseas marcar como no completada la tarea '${taskTitle}'?")
+          : Text(
+              "¿Estás seguro que deseas marcar como completada la tarea '${taskTitle}'?"),
+      actions: [
+        cancel,
+        isComplete ? notCompletedButton : completedButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return completedAlert;
+      },
+    );
   }
 }

@@ -391,12 +391,17 @@ class _TasksPageState extends State<TasksPage> {
           child: Icon(Icons.arrow_back_ios, size: 24, color: primaryClr),
         ),
         actions: [
-          CircleAvatar(
-            radius: 22,
-            backgroundImage: userInfo.urlPicture != ""
-                ? NetworkImage(
-                    "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
-                : AssetImage("assets/default-profile.png"),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed('/me');
+            },
+            child: CircleAvatar(
+              radius: 22,
+              backgroundImage: userInfo.urlPicture != ""
+                  ? NetworkImage(
+                      "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
+                  : AssetImage("assets/default-profile.png"),
+            ),
           ),
           SizedBox(
             width: 20,

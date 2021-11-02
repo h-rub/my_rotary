@@ -1,3 +1,4 @@
+import 'package:my_rotary/providers/member_info.dart';
 import 'package:my_rotary/providers/task_info.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/home/home_page.dart';
@@ -15,6 +16,10 @@ import 'package:get/get.dart';
 import 'package:my_rotary/utils/validators/return_token.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/members/member_page/member_profile.dart';
+import 'screens/members/members_screen.dart';
+import 'screens/my_club/my_club.dart';
+import 'screens/polls/polls_demo.dart';
 import 'screens/profile/my_profile.dart';
 import 'screens/profile/test_page.dart';
 import 'screens/settings/settings_page.dart';
@@ -38,7 +43,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserInfo()),
-        ChangeNotifierProvider(create: (_) => TaskInfo())
+        ChangeNotifierProvider(create: (_) => TaskInfo()),
+        ChangeNotifierProvider(create: (_) => MemberInfo())
       ],
       child: GetMaterialApp(
         theme: Themes.light,
@@ -61,6 +67,10 @@ class MyApp extends StatelessWidget {
           '/test': (context) => TestPage(),
           '/detail': (context) => DetailsPageTask(),
           '/wait': (context) => WaitPage(),
+          '/my-club': (context) => MyClubPage(),
+          '/members': (context) => MembersPage(),
+          '/member-profile': (context) => MemberProfile(),
+          '/polls-demo': (context) => PollsDemo()
         },
       ),
     );
