@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:my_rotary/screens/members/members_screen.dart';
+import 'package:my_rotary/screens/tasks/tasks_page.dart';
 import 'package:my_rotary/theme.dart';
 
 import 'feed/feed.dart';
+import 'notifications/notifications.dart';
 
 class MyClubPage extends StatefulWidget {
   static const routeName = 'home';
@@ -17,9 +19,8 @@ class _MyClubPageState extends State<MyClubPage> {
       TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   final List<Widget> _widgetOptions = <Widget>[
     Text('Feed'),
-    Text('2'),
     MembersPage(),
-    Text('4'),
+    NotificationPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,6 @@ class _MyClubPageState extends State<MyClubPage> {
         type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
-          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Tareas'),
           BottomNavigationBarItem(
               icon: Icon(Icons.person_search), label: 'Miembros'),
           BottomNavigationBarItem(

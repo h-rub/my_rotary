@@ -141,29 +141,30 @@ class _MembersPageState extends State<MembersPage> {
     final memberInfo = Provider.of<MemberInfo>(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         brightness: Brightness.dark,
-        backgroundColor: primaryClr,
-        leading: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: Icon(Icons.arrow_back_ios, size: 24, color: Colors.white),
-        ),
+        backgroundColor: Colors.white,
         title: Container(
-          height: 38,
+          height: 45,
           child: TextField(
+            autocorrect: false,
             style: TextStyle(color: Colors.white),
             onChanged: (value) => onSearch(value),
             decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
                 filled: true,
-                fillColor: primaryClr,
-                contentPadding: EdgeInsets.all(0),
-                prefixIcon: Icon(Icons.search, color: Colors.white),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: BorderSide.none),
-                hintStyle: TextStyle(fontSize: 14, color: Colors.white),
+                fillColor: Colors.grey[200],
+                contentPadding: EdgeInsets.all(10),
+                prefixIcon: Icon(Icons.search, color: primaryClr),
+                hintStyle: TextStyle(fontSize: 14, color: Colors.black),
                 hintText: "Buscar miembros"),
           ),
         ),
