@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 
 import 'screens/members/member_page/member_profile.dart';
 import 'screens/members/members_screen.dart';
+import 'screens/my_club/create_post/create_post.screen.dart';
 import 'screens/my_club/my_club.dart';
 import 'screens/polls/polls_demo.dart';
 import 'screens/profile/my_profile.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   Future<String> token = returnValueToken();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContextcontext) {
     print(token);
     return MultiProvider(
       providers: [
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         theme: Themes.light,
         darkTheme: Themes.dark,
         themeMode: ThemeService().theme,
-        title: 'Rotary Club Monterrey',
+        title: 'Rotary Club Sierra Madre',
         //home: token != null ? LoginPage() : HomePage(),
         debugShowCheckedModeBanner: false,
         initialRoute: token != null ? '/login' : '/',
@@ -70,7 +71,8 @@ class MyApp extends StatelessWidget {
           '/my-club': (context) => MyClubPage(),
           '/members': (context) => MembersPage(),
           '/member-profile': (context) => MemberProfile(),
-          '/polls-demo': (context) => PollsDemo()
+          '/polls-demo': (context) => PollsDemo(),
+          '/create-post': (context) => CreatePost(),
         },
       ),
     );

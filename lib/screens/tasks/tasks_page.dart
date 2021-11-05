@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/task_info.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/home/home_page.dart';
@@ -219,23 +220,24 @@ class _TasksPageState extends State<TasksPage> {
                                             children: [
                                               Text(
                                                 "${data[position]['title']}",
-                                                style: TextStyle(
+                                                style: GoogleFonts.poppins(
                                                     fontSize: 22.0,
                                                     color: primaryColor,
                                                     fontWeight:
-                                                        FontWeight.bold),
+                                                        FontWeight.w500),
                                               ),
                                               SizedBox(height: 10.0),
                                               Text(
                                                 shortenDescription(
                                                     "${data[position]['description']}",
                                                     descLimit: 70),
-                                                style: TextStyle(fontSize: 18),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 18),
                                               ),
                                               SizedBox(height: 12.0),
                                               Text(
                                                 "Asignado a:",
-                                                style: TextStyle(
+                                                style: GoogleFonts.poppins(
                                                     color: Colors.grey,
                                                     fontSize: 16.0,
                                                     fontWeight:
@@ -258,13 +260,14 @@ class _TasksPageState extends State<TasksPage> {
                                                   ),
                                                   Text(
                                                       "${data[position]['user_asigned_to']['full_name']}",
-                                                      style: TextStyle(
-                                                          fontSize: 16)),
+                                                      style: GoogleFonts
+                                                          .montserrat(
+                                                              fontSize: 16)),
                                                   SizedBox(width: _separator),
                                                   Text(
                                                     formatDate(
                                                         "${data[position]['due_date']}"),
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.poppins(
                                                         color: Colors.grey,
                                                         fontSize: 16.0,
                                                         fontWeight:
@@ -437,7 +440,7 @@ class _TasksPageState extends State<TasksPage> {
 
     // set up the button
     Widget deleteButton = TextButton(
-      child: Text("Eliminar", style: TextStyle(color: Colors.red)),
+      child: Text("Eliminar", style: GoogleFonts.poppins(color: Colors.red)),
       onPressed: () {
         deleteTask();
       },
@@ -527,13 +530,13 @@ class _TasksPageState extends State<TasksPage> {
 
     // set up the button
     Widget completedButton = TextButton(
-      child: Text("Completar", style: TextStyle(color: Colors.green)),
+      child: Text("Completar", style: GoogleFonts.poppins(color: Colors.green)),
       onPressed: () {
         completedTask();
       },
     );
     Widget notCompletedButton = TextButton(
-      child: Text("Confirmar", style: TextStyle(color: Colors.red)),
+      child: Text("Confirmar", style: GoogleFonts.poppins(color: Colors.red)),
       onPressed: () {
         notCompletedTask();
       },

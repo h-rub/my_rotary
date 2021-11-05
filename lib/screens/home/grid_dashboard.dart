@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
@@ -51,30 +52,30 @@ class GridDashboard extends StatelessWidget {
                   ),
                   Text(
                     data.title,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Text(
                     data.subtitle,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         color: Colors.white38,
                         fontSize: 10,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
                     height: 14,
                   ),
                   // Text(
                   //   data.event,
-                  //   style: TextStyle(
+                  //   style: GoogleFonts.poppins(
                   //       color: Colors.white70,
                   //       fontSize: 11,
-                  //       fontWeight: FontWeight.w600),
+                  //       fontWeight: FontWeight.w400),
                   // ),
                 ],
               ),

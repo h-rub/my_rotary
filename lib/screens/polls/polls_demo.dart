@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_rotary/providers/user_info.dart';
 import 'package:polls/polls.dart';
+
+import 'package:my_rotary/theme.dart';
+import 'package:get/get.dart' hide FormData, Response;
+import 'package:provider/provider.dart';
 
 class PollsDemo extends StatefulWidget {
   @override
@@ -23,13 +29,11 @@ class _PollsDemoState extends State<PollsDemo> {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Flutter Polls Widget Demo"),
-        automaticallyImplyLeading: false,
-      ),
+      appBar: _appBar(userInfo),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(35.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,17 +47,20 @@ class _PollsDemoState extends State<PollsDemo> {
               ],
               question: Text(
                 'Which Andriod App Development technology used?',
-                style: TextStyle(fontSize: 17),
+                style: GoogleFonts.poppins(fontSize: 17),
               ),
               currentUser: this.user,
               creatorID: this.creator,
               voteData: usersWhoVoted,
               userChoice: usersWhoVoted[this.user],
-              onVoteBackgroundColor: Colors.cyan,
-              leadingBackgroundColor: Colors.cyan,
+              onVoteBackgroundColor: Colors.blue,
+              leadingBackgroundColor: Colors.green,
               backgroundColor: Colors.white,
               onVote: (choice) {
                 print(choice);
+                print(user);
+                print(creator);
+                print(usersWhoVoted);
                 setState(() {
                   this.usersWhoVoted[this.user] = choice;
                 });
@@ -83,5 +90,34 @@ class _PollsDemoState extends State<PollsDemo> {
         ),
       ),
     );
+  }
+
+  _appBar(userInfo) {
+    return AppBar(
+        brightness: context.theme.brightness,
+        title: Text(
+          "Votaciones",
+          style: headingTextStyle,
+        ),
+        elevation: 4,
+        backgroundColor: context.theme.backgroundColor,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Icon(Icons.arrow_back_ios, size: 24, color: primaryClr),
+        ),
+        actions: [
+          CircleAvatar(
+            radius: 22,
+            backgroundImage: userInfo.urlPicture != ""
+                ? NetworkImage(
+                    "http://rotary.syncronik.com/media/${userInfo.urlPicture}")
+                : AssetImage("assets/default-profile.png"),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ]);
   }
 }

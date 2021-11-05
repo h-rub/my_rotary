@@ -1,5 +1,6 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/theme.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +45,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   },
                   child: Text(
                     'Eliminar',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         fontSize: 12.5,
                         fontWeight: FontWeight.bold,
                         color: Colors.red),
@@ -57,7 +58,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   },
                   child: Text(
                     'Marcar como completado',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       fontSize: 12.5,
                       fontWeight: FontWeight.bold,
                     ),

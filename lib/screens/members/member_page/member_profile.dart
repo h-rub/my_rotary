@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/member_info.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:flutter/material.dart';
@@ -68,11 +69,12 @@ class _MemberProfileState extends State<MemberProfile> {
         children: [
           const SizedBox(height: 30.0),
           Text("${memberInfo.firstName} ${memberInfo.lastName}",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+              style: GoogleFonts.poppins(
+                  fontSize: 22, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Text("Miembro",
-              style:
-                  TextStyle(fontSize: 20, color: context.theme.primaryColor)),
+              style: GoogleFonts.poppins(
+                  fontSize: 20, color: context.theme.primaryColor)),
           const SizedBox(height: 8),
           Divider(),
           Center(
@@ -83,7 +85,7 @@ class _MemberProfileState extends State<MemberProfile> {
                   Container(
                     alignment: Alignment.topLeft,
                     child: Text("Información de contacto",
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         )),
@@ -94,7 +96,8 @@ class _MemberProfileState extends State<MemberProfile> {
                       Icon(Icons.place, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${memberInfo.address}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                   SizedBox(height: 8.0),
@@ -103,7 +106,8 @@ class _MemberProfileState extends State<MemberProfile> {
                       Icon(Icons.phone, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${memberInfo.phone}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                   SizedBox(height: 8.0),
@@ -112,7 +116,8 @@ class _MemberProfileState extends State<MemberProfile> {
                       Icon(Icons.email, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${memberInfo.email}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -133,13 +138,14 @@ class _MemberProfileState extends State<MemberProfile> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text("Sobre ${memberInfo.firstName}",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                style: GoogleFonts.poppins(
+                    fontSize: 20, fontWeight: FontWeight.w600)),
             const SizedBox(height: 18),
             memberInfo.biography != ""
                 ? Text("${memberInfo.biography}",
-                    style: TextStyle(fontSize: 16))
+                    style: GoogleFonts.poppins(fontSize: 16))
                 : Text("Miembro del Club Rotario Sierra Madre",
-                    style: TextStyle(fontSize: 16))
+                    style: GoogleFonts.poppins(fontSize: 16))
           ]),
         ),
       );

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/home/home_page.dart';
 import 'package:my_rotary/utils/alert_dialog.dart';
@@ -131,9 +132,8 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 Text(
                   'Bienvenido',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.black,
-                      fontFamily: 'SFPro',
                       fontSize: 32,
                       fontWeight: FontWeight.w600),
                 ),
@@ -143,13 +143,14 @@ class _LoginState extends State<Login> {
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
                       controller: _emailController,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Correo electrónico',
                         prefixIcon: Icon(Icons.mail_outline),
-                        labelStyle: TextStyle(fontSize: 17),
+                        labelStyle: GoogleFonts.poppins(fontSize: 17),
                       ),
                     ),
                   ),
@@ -159,7 +160,9 @@ class _LoginState extends State<Login> {
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: !_passwordVisible,
-                    style: TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Contraseña',
@@ -177,7 +180,7 @@ class _LoginState extends State<Login> {
                             });
                           },
                         ),
-                        labelStyle: TextStyle(fontSize: 17)),
+                        labelStyle: GoogleFonts.poppins(fontSize: 17)),
                   ),
                 ),
                 Padding(
@@ -199,9 +202,8 @@ class _LoginState extends State<Login> {
                     },
                     child: Text(
                       'Iniciar sesión',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontSize: 17,
-                        fontFamily: 'SFPro',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -214,29 +216,27 @@ class _LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: 30),
+                //   child: Center(
+                //     child: Text(
+                //       'Recuperar contraseña',
+                //       style: GoogleFonts.poppins(
+                //         fontSize: 16,
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: Center(
-                    child: Text(
-                      'Recuperar contraseña',
-                      style: TextStyle(
-                        fontFamily: 'SFPro',
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(top: 25),
                   child: Center(
                     child: RichText(
                       text: TextSpan(children: [
                         TextSpan(
                             text: "¿No tienes una cuenta? ",
-                            style: TextStyle(
-                              fontFamily: 'SFPro',
+                            style: GoogleFonts.poppins(
                               color: Colors.black,
-                              fontSize: 17,
+                              fontSize: 16,
                             )),
                         TextSpan(
                             recognizer: TapGestureRecognizer()
@@ -245,8 +245,7 @@ class _LoginState extends State<Login> {
                                   MaterialPageRoute(
                                       builder: (context) => RegisterPage())),
                             text: "Regístrate",
-                            style: TextStyle(
-                              fontFamily: 'SFPro',
+                            style: GoogleFonts.poppins(
                               color: thirdColor,
                               fontSize: 17,
                             ))

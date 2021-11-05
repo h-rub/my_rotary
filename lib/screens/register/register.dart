@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/screens/login/login.dart';
 import 'package:my_rotary/screens/wait/wait_page.dart';
 import 'package:my_rotary/utils/alert_dialog.dart';
@@ -111,9 +112,8 @@ class _RegisterState extends State<Register> {
               children: <Widget>[
                 Text(
                   'Regístrate',
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.black,
-                      fontFamily: 'SFPro',
                       fontSize: 32,
                       fontWeight: FontWeight.w600),
                 ),
@@ -123,13 +123,14 @@ class _RegisterState extends State<Register> {
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
                       controller: _firstName_Controller,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Nombre',
                           prefixIcon: Icon(Icons.person_outline),
-                          labelStyle: TextStyle(fontSize: 17)),
+                          labelStyle: GoogleFonts.poppins(fontSize: 17)),
                     ),
                   ),
                 ),
@@ -137,12 +138,14 @@ class _RegisterState extends State<Register> {
                   color: Color(0xfff5f5f5),
                   child: TextFormField(
                     controller: _lastName_Controller,
-                    style: TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Apellidos',
                         prefixIcon: Icon(Icons.person_outline),
-                        labelStyle: TextStyle(fontSize: 17)),
+                        labelStyle: GoogleFonts.poppins(fontSize: 17)),
                   ),
                 ),
                 Padding(
@@ -152,13 +155,14 @@ class _RegisterState extends State<Register> {
                     child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       controller: _email_Controller,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Correo electrónico',
                           prefixIcon: Icon(Icons.mail_outline),
-                          labelStyle: TextStyle(fontSize: 17)),
+                          labelStyle: GoogleFonts.poppins(fontSize: 17)),
                     ),
                   ),
                 ),
@@ -169,8 +173,9 @@ class _RegisterState extends State<Register> {
                     child: TextFormField(
                       obscureText: !_passwordVisible,
                       controller: _password_Controller,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Contraseña',
@@ -188,7 +193,7 @@ class _RegisterState extends State<Register> {
                               });
                             },
                           ),
-                          labelStyle: TextStyle(fontSize: 17)),
+                          labelStyle: GoogleFonts.poppins(fontSize: 17)),
                     ),
                   ),
                 ),
@@ -199,13 +204,14 @@ class _RegisterState extends State<Register> {
                     child: TextFormField(
                       keyboardType: TextInputType.phone,
                       controller: _phone_Controller,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Teléfono',
                           prefixIcon: Icon(Icons.phone),
-                          labelStyle: TextStyle(fontSize: 17)),
+                          labelStyle: GoogleFonts.poppins(fontSize: 17)),
                     ),
                   ),
                 ),
@@ -213,12 +219,14 @@ class _RegisterState extends State<Register> {
                   color: Color(0xfff5f5f5),
                   child: TextFormField(
                     controller: _company_Controller,
-                    style: TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: 'Compañia',
                         prefixIcon: Icon(Icons.business_center_outlined),
-                        labelStyle: TextStyle(fontSize: 17)),
+                        labelStyle: GoogleFonts.poppins(fontSize: 17)),
                   ),
                 ),
                 Padding(
@@ -227,13 +235,14 @@ class _RegisterState extends State<Register> {
                     color: Color(0xfff5f5f5),
                     child: TextFormField(
                       controller: _address_Controller,
-                      style:
-                          TextStyle(color: Colors.black, fontFamily: 'SFPro'),
+                      style: GoogleFonts.poppins(
+                        color: Colors.black,
+                      ),
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Dirección',
                           prefixIcon: Icon(Icons.home),
-                          labelStyle: TextStyle(fontSize: 17)),
+                          labelStyle: GoogleFonts.poppins(fontSize: 17)),
                     ),
                   ),
                 ),
@@ -266,9 +275,8 @@ class _RegisterState extends State<Register> {
                     }, //since this is only a UI app
                     child: Text(
                       'Crear cuenta',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontSize: 17,
-                        fontFamily: 'SFPro',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -288,19 +296,17 @@ class _RegisterState extends State<Register> {
                       text: TextSpan(children: [
                         TextSpan(
                             text: "¿Ya tienes una cuenta? ",
-                            style: TextStyle(
-                              fontFamily: 'SFPro',
+                            style: GoogleFonts.poppins(
                               color: Colors.black,
-                              fontSize: 17,
+                              fontSize: 16,
                             )),
                         TextSpan(
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => Navigator.pop(context),
                             text: "Inicia sesión",
-                            style: TextStyle(
-                              fontFamily: 'SFPro',
+                            style: GoogleFonts.poppins(
                               color: thirdColor,
-                              fontSize: 17,
+                              fontSize: 16,
                             ))
                       ]),
                     ),

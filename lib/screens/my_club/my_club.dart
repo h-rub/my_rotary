@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/screens/members/members_screen.dart';
 import 'package:my_rotary/screens/tasks/tasks_page.dart';
 import 'package:my_rotary/theme.dart';
@@ -15,10 +16,10 @@ class MyClubPage extends StatefulWidget {
 
 class _MyClubPageState extends State<MyClubPage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+  var optionStyle =
+      GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold);
   final List<Widget> _widgetOptions = <Widget>[
-    Text('Feed'),
+    Feed(),
     MembersPage(),
     NotificationPage(),
   ];

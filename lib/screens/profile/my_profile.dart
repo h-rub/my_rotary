@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:my_rotary/theme.dart';
@@ -88,11 +89,12 @@ class _MyProfileState extends State<MyProfile> {
         children: [
           const SizedBox(height: 30.0),
           Text("${userInfo.firstName} ${userInfo.lastName}",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600)),
+              style: GoogleFonts.poppins(
+                  fontSize: 22, fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
           Text("Miembro",
-              style:
-                  TextStyle(fontSize: 20, color: context.theme.primaryColor)),
+              style: GoogleFonts.poppins(
+                  fontSize: 20, color: context.theme.primaryColor)),
           const SizedBox(height: 8),
           Divider(),
           Center(
@@ -103,7 +105,7 @@ class _MyProfileState extends State<MyProfile> {
                   Container(
                     alignment: Alignment.topLeft,
                     child: Text("Información de contacto",
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         )),
@@ -114,7 +116,8 @@ class _MyProfileState extends State<MyProfile> {
                       Icon(Icons.place, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${userInfo.address}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                   SizedBox(height: 8.0),
@@ -123,7 +126,8 @@ class _MyProfileState extends State<MyProfile> {
                       Icon(Icons.phone, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${userInfo.phone}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                   SizedBox(height: 8.0),
@@ -132,7 +136,8 @@ class _MyProfileState extends State<MyProfile> {
                       Icon(Icons.email, color: Colors.grey),
                       SizedBox(width: 8.0),
                       Text("${userInfo.email}",
-                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                          style: GoogleFonts.poppins(
+                              fontSize: 16, color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -153,9 +158,11 @@ class _MyProfileState extends State<MyProfile> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text("Sobre mi",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                style: GoogleFonts.poppins(
+                    fontSize: 20, fontWeight: FontWeight.w600)),
             const SizedBox(height: 18),
-            Text("${userInfo.biography}", style: TextStyle(fontSize: 16))
+            Text("${userInfo.biography}",
+                style: GoogleFonts.poppins(fontSize: 16))
           ]),
         ),
       );

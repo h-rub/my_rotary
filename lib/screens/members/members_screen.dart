@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/member_info.dart';
 import 'package:provider/provider.dart';
 
@@ -149,7 +150,7 @@ class _MembersPageState extends State<MembersPage> {
           height: 45,
           child: TextField(
             autocorrect: false,
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.poppins(color: Colors.white),
             onChanged: (value) => onSearch(value),
             decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
@@ -164,7 +165,8 @@ class _MembersPageState extends State<MembersPage> {
                 fillColor: Colors.grey[200],
                 contentPadding: EdgeInsets.all(10),
                 prefixIcon: Icon(Icons.search, color: primaryClr),
-                hintStyle: TextStyle(fontSize: 14, color: Colors.black),
+                hintStyle:
+                    GoogleFonts.poppins(fontSize: 14, color: Colors.black),
                 hintText: "Buscar miembros"),
           ),
         ),
@@ -205,7 +207,7 @@ class _MembersPageState extends State<MembersPage> {
                   : Center(
                       child: Text(
                       "No users found",
-                      style: TextStyle(color: Colors.white),
+                      style: GoogleFonts.poppins(color: Colors.white),
                     )),
             ),
             onRefresh: () {
@@ -273,13 +275,13 @@ class _MembersPageState extends State<MembersPage> {
             SizedBox(width: 10),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(user.fullName,
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       color: Colors.black, fontWeight: FontWeight.w500)),
               SizedBox(
                 height: 5,
               ),
               Text("@${user.userName}",
-                  style: TextStyle(color: Colors.grey[500])),
+                  style: GoogleFonts.poppins(color: Colors.grey[500])),
             ])
           ]),
         ],

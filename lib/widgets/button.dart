@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/theme.dart';
 
 class MyButton extends StatelessWidget {
@@ -26,7 +27,7 @@ class MyButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: TextStyle(color: Colors.white, fontSize: 18),
+            style: GoogleFonts.poppins(color: Colors.white, fontSize: 18),
           ),
         ),
       ),

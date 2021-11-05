@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/login/login.dart';
 import 'package:my_rotary/services/profile_services.dart';
@@ -222,20 +223,15 @@ Widget Dashboard(String first_name, context) {
     children: [
       first_name == null
           ? Text("Bienvenido 👀",
-              style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: 'SFPro',
-                  fontWeight: FontWeight.w600))
+              style: GoogleFonts.poppins(
+                  fontSize: 32, fontWeight: FontWeight.w600))
           : Text("Hola ${first_name} 👋",
-              style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: 'SFPro',
-                  fontWeight: FontWeight.w600)),
+              style: GoogleFonts.poppins(
+                  fontSize: 32, fontWeight: FontWeight.w600)),
       SizedBox(height: 7),
       Text("Dashboard",
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 20,
-            fontFamily: 'SFPro',
           )),
       GridView.count(
           physics: NeverScrollableScrollPhysics(),
@@ -263,7 +259,7 @@ Widget Dashboard(String first_name, context) {
                     ),
                     Text(
                       data.title,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
@@ -273,7 +269,7 @@ Widget Dashboard(String first_name, context) {
                     ),
                     Text(
                       data.subtitle,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                           color: Colors.white38,
                           fontSize: 16,
                           fontWeight: FontWeight.w600),
@@ -283,7 +279,7 @@ Widget Dashboard(String first_name, context) {
                     ),
                     // Text(
                     //   data.event,
-                    //   style: TextStyle(
+                    //   style: GoogleFonts.poppins(
                     //       color: Colors.white70,
                     //       fontSize: 11,
                     //       fontWeight: FontWeight.w600),

@@ -15,11 +15,11 @@ class NotificationPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: Text(
                   'Notificaciones',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.poppins(
                       color: Colors.grey[700],
                       fontSize: 18,
                       letterSpacing: 1,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.w600),
                 ),
               ),
               Padding(
@@ -34,7 +34,7 @@ class NotificationPage extends StatelessWidget {
             Center(
               child: Text(
                 'Hoy',
-                style: GoogleFonts.lato(
+                style: GoogleFonts.poppins(
                     color: Colors.grey[600],
                     fontSize: 15,
                     letterSpacing: 1,
@@ -68,21 +68,21 @@ class NotificationPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ListTile(
                     leading: CircleAvatar(
-                        radius: 40,
+                        radius: 20.0,
                         backgroundImage: NetworkImage(
-                          'https://content.api.news/v3/images/bin/a6923adbc7bece73803221613f410782',
+                          'http://rotary.syncronik.com/media/profile_pics/default-user.png',
                         )),
                     title: Text(
                       'Hernán Restrepo',
-                      style: GoogleFonts.lato(
+                      style: GoogleFonts.poppins(
                           color: Colors.black,
                           letterSpacing: 1,
                           fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                          fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
                       'Te ha asignado una tarea',
-                      style: GoogleFonts.lato(
+                      style: GoogleFonts.poppins(
                           color: Colors.grey[700],
                           letterSpacing: 1,
                           fontSize: 13,
@@ -92,7 +92,7 @@ class NotificationPage extends StatelessWidget {
                       children: [
                         Text(
                           '14:25',
-                          style: GoogleFonts.lato(
+                          style: GoogleFonts.poppins(
                               color: Colors.grey[500],
                               letterSpacing: 0.6,
                               fontSize: 12,

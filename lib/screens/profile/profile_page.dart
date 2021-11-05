@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/services/profile_services.dart';
 import 'package:dio/dio.dart';
@@ -334,7 +335,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             Get.back();
                           },
                           child: Text("CANCELAR",
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
                                   color: Colors.black)),
@@ -359,7 +360,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
                             "GUARDAR",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 letterSpacing: 2.2,
                                 color: Colors.white),
@@ -392,7 +393,7 @@ void showAlertDialogcontext(
               color: primaryColor,
               child: Text(
                 "Cerrar",
-                style: TextStyle(color: Colors.white),
+                style: GoogleFonts.poppins(color: Colors.white),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

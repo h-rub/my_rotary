@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/task_info.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/widgets/input_field.dart';
@@ -13,6 +14,9 @@ import 'package:intl/intl.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+
+import 'package:get/get.dart';
+import 'package:my_rotary/theme.dart';
 
 class DetailsPageTask extends StatefulWidget {
   @override
@@ -86,7 +90,7 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
 
     // set up the button
     Widget deleteButton = TextButton(
-      child: Text("Eliminar", style: TextStyle(color: Colors.red)),
+      child: Text("Eliminar", style: GoogleFonts.poppins(color: Colors.red)),
       onPressed: () {
         deleteTask();
       },
@@ -156,7 +160,7 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                   },
                   child: Text(
                     'Eliminar',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         fontSize: 12.5,
                         fontWeight: FontWeight.bold,
                         color: Colors.red),
@@ -172,14 +176,14 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                   child: taskInfo.isCompleted
                       ? Text(
                           'Marcar como no completado',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 12.5,
                             fontWeight: FontWeight.bold,
                           ),
                         )
                       : Text(
                           'Marcar como completado',
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 12.5,
                             fontWeight: FontWeight.bold,
                           ),
@@ -205,11 +209,11 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
                   taskInfo.isCompleted
                       ? Text(
                           "Tarea completada",
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                               color: Colors.green, fontWeight: FontWeight.w600),
                         )
                       : Text("Tarea aún no completada",
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                               color: Colors.indigo,
                               fontWeight: FontWeight.w600)),
                 ],
@@ -549,13 +553,13 @@ class _DetailsPageTaskState extends State<DetailsPageTask> {
 
     // set up the button
     Widget completedButton = TextButton(
-      child: Text("Completar", style: TextStyle(color: Colors.green)),
+      child: Text("Completar", style: GoogleFonts.poppins(color: Colors.green)),
       onPressed: () {
         completedTask();
       },
     );
     Widget notCompletedButton = TextButton(
-      child: Text("Confirmar", style: TextStyle(color: Colors.red)),
+      child: Text("Confirmar", style: GoogleFonts.poppins(color: Colors.red)),
       onPressed: () {
         notCompletedTask();
       },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_rotary/providers/user_info.dart';
 import 'package:my_rotary/screens/login/login.dart';
 import 'package:my_rotary/services/theme_services.dart';
@@ -88,7 +89,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     logout();
                   }),
               SettingsTile(
-                  titleTextStyle: TextStyle(color: Colors.red, fontSize: 16),
+                  titleTextStyle:
+                      GoogleFonts.poppins(color: Colors.red, fontSize: 16),
                   title: 'Eliminar mi cuenta',
                   leading: Icon(Icons.delete_forever, color: Colors.red),
                   onPressed: (BuildContext context) {}),

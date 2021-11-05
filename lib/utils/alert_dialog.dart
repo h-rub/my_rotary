@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void showAlertDialog(String message, context) {
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
@@ -13,7 +14,7 @@ void showAlertDialog(String message, context) {
               color: primaryColor,
               child: Text(
                 "Cerrar",
-                style: TextStyle(color: Colors.white),
+                style: GoogleFonts.poppins(color: Colors.white),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:my_rotary/theme.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,7 @@ class _WaitPageState extends State<WaitPage> {
               children: [
                 Text(
                   "Ya casi lo tienes 🙌",
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
                       color: Colors.black),
@@ -50,7 +51,7 @@ class _WaitPageState extends State<WaitPage> {
                 Text(
                   "Tu cuenta ha sido enviada a revisión. Una vez sea aprobada por el club podrás acceder a la app, te notificaremos por correo cuando esto pase",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: 16,
                   ),
@@ -60,7 +61,7 @@ class _WaitPageState extends State<WaitPage> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   height: 50,
                   minWidth: 400,
@@ -71,7 +72,8 @@ class _WaitPageState extends State<WaitPage> {
                   color: Colors.orange.shade400,
                   child: Text(
                     "Revisar estado",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style:
+                        GoogleFonts.poppins(color: Colors.white, fontSize: 16),
                   ),
                 )
               ],
