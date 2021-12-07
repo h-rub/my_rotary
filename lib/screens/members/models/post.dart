@@ -1,4 +1,5 @@
 class Post {
+  String pid;
   String profileImageUrl;
   String username;
   String time;
@@ -6,18 +7,21 @@ class Post {
   String likes;
   String comments;
   String shares;
+  bool isLikedByMe;
 
   Post(
-      {this.profileImageUrl,
+      {this.pid,
+      this.profileImageUrl,
       this.username,
       this.time,
       this.content,
       this.likes,
       this.comments,
-      this.shares});
+      this.shares,
+      this.isLikedByMe});
 }
 
-List<Post> posts = [
+/* List<Post> posts = [
   new Post(
       profileImageUrl: 'assets/default-profile.png',
       username: 'Sam Wilson',
@@ -64,3 +68,4 @@ List<Post> posts = [
       comments: '7',
       shares: '2'),
 ];
+ */

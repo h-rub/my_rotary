@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_rotary/providers/user_info.dart';
+import 'package:provider/provider.dart';
 
 class WriteSomethingWidget extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class WriteSomethingWidget extends StatefulWidget {
 class _WriteSomethingWidgetState extends State<WriteSomethingWidget> {
   @override
   Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfo>(context);
     return Container(
       child: Column(
         children: <Widget>[
@@ -19,7 +22,8 @@ class _WriteSomethingWidgetState extends State<WriteSomethingWidget> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 28.0,
-                  backgroundImage: AssetImage('assets/default-profile.png'),
+                  backgroundImage: NetworkImage(
+                      "http://rotary.syncronik.com/media/${userInfo.urlPicture}"),
                 ),
                 SizedBox(width: 7.0),
                 GestureDetector(
@@ -34,7 +38,7 @@ class _WriteSomethingWidgetState extends State<WriteSomethingWidget> {
                     decoration: BoxDecoration(
                         border: Border.all(width: 1.0, color: Colors.grey[400]),
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: Text('¿En que estás pensando?'),
+                    child: Text('¿Qué estás pensando?'),
                   ),
                 )
               ],

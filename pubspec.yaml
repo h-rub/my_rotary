@@ -47,6 +47,7 @@ dependencies:
   community_material_icon: ^5.8.55
   flutter_launcher_icons: ^0.8.1
   polls: ^0.2.2
+  skeleton_text: ^2.0.2
 
 
 

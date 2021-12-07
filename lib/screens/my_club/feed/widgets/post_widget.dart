@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_rotary/screens/members/models/post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:http/http.dart' as http;
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -13,6 +18,31 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   bool likedByMe = false;
+
+  // Shared Preferennces
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  saveLike(postID) async {
+    final SharedPreferences prefs = await _prefs;
+    int user_id = await prefs.getInt("user_id");
+    String url = "http://rotary.syncronik.com/api/v1/myclub/posts/reaction";
+    var jsonResponse;
+    Map body = {"post_id": postID.toString(), "liked_by": user_id.toString()};
+    var res = await http.post(url, body: body);
+
+    if (res.statusCode == 200) {
+      String source = Utf8Decoder().convert(res.bodyBytes);
+      jsonResponse = json.decode(source);
+      print("Status code ${res.statusCode}");
+      print("Response JSON ${jsonResponse}");
+      setState(() {});
+      if (jsonResponse != Null) {}
+    } else if (res.statusCode == 401) {
+      print("Error de autenticación");
+    } else if (res.statusCode == 500) {
+      print("Error del servidor");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,14 +50,17 @@ class _PostWidgetState extends State<PostWidget> {
       child: Column(
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: AssetImage(widget.post.profileImageUrl),
+                backgroundImage: NetworkImage(
+                    "http://rotary.syncronik.com/media/${widget.post.profileImageUrl}"),
                 radius: 20.0,
               ),
               SizedBox(width: 7.0),
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(widget.post.username,
@@ -40,8 +73,15 @@ class _PostWidgetState extends State<PostWidget> {
             ],
           ),
           SizedBox(height: 20.0),
-          Text(widget.post.content, style: TextStyle(fontSize: 15.0)),
-          SizedBox(height: 10.0),
+          Column(
+            children: [
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(widget.post.content,
+                      style: TextStyle(fontSize: 16.0))),
+            ],
+          ),
+          SizedBox(height: 13.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -49,13 +89,12 @@ class _PostWidgetState extends State<PostWidget> {
                 children: <Widget>[
                   Icon(FontAwesomeIcons.thumbsUp,
                       size: 15.0, color: Colors.blue),
-                  Text('${widget.post.likes}'),
+                  Text(' ${widget.post.likes}'),
                 ],
               ),
               Row(
                 children: <Widget>[
-                  Text('${widget.post.comments} comments  •  '),
-                  Text('${widget.post.shares} shares'),
+                  Text('${widget.post.comments} comments'),
                 ],
               ),
             ],
@@ -67,13 +106,13 @@ class _PostWidgetState extends State<PostWidget> {
             children: <Widget>[
               GestureDetector(
                   onTap: () {
-                    print("Like!");
                     setState(() {
-                      likedByMe = !likedByMe;
+                      widget.post.isLikedByMe = !widget.post.isLikedByMe;
                     });
+                    saveLike(widget.post.pid);
                     var likesInt = int.parse(widget.post.likes);
                     assert(likesInt is int);
-                    if (likedByMe) {
+                    if (widget.post.isLikedByMe) {
                       likesInt += 1;
                       widget.post.likes = likesInt.toString();
                     } else {
@@ -81,7 +120,7 @@ class _PostWidgetState extends State<PostWidget> {
                       widget.post.likes = likesInt.toString();
                     }
                   },
-                  child: likedByMe
+                  child: widget.post.isLikedByMe
                       ? Row(
                           children: <Widget>[
                             Icon(FontAwesomeIcons.thumbsUp,

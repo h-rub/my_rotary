@@ -29,6 +29,8 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 import 'package:my_rotary/theme.dart';
 
+import 'package:skeleton_text/skeleton_text.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
@@ -39,6 +41,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController _searchController = TextEditingController();
 
+  bool isLoading = true;
   String first_name;
   var picture;
 
@@ -76,6 +79,10 @@ class _HomePageState extends State<HomePage> {
   String bio_shared;
 
   loadProfileData() async {
+    setState(() {
+      isLoading = true;
+    });
+    print("Cargando datos");
     final SharedPreferences prefs = await _prefs;
     int user_id = await prefs.getInt("user_id");
     String token = await prefs.getString("token");
@@ -95,6 +102,9 @@ class _HomePageState extends State<HomePage> {
       jsonResponse = json.decode(source);
 
       var picture_json = jsonResponse['picture'];
+      ProfileServices().saveProfileURL(jsonResponse['picture']);
+      var urlPictureLoaded = ProfileServices().loadURLPictureProfile();
+
       var bio = jsonResponse['bio'];
 
       print(picture_json);
@@ -103,8 +113,9 @@ class _HomePageState extends State<HomePage> {
       // print("Status code ${res.statusCode}");
       // print("Response JSON ${jsonResponse}");
       setState(() {
-        url_image = picture_json;
+        url_image = urlPictureLoaded;
         bio_shared = bio;
+        isLoading = false;
       });
       //print(data);
       if (jsonResponse != Null) {}
@@ -133,8 +144,60 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final userInfo = Provider.of<UserInfo>(context);
     userInfo.biography = bio_shared;
+    url_image = ProfileServices().loadURLPictureProfile();
     userInfo.urlPicture = url_image;
 
+    return isLoading
+        ? buildLoading(context, userInfo)
+        : buildScaffold(context, userInfo);
+  }
+
+  Scaffold buildLoading(BuildContext context, UserInfo userInfo) {
+    return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: context.theme.backgroundColor,
+        brightness: context.theme.brightness,
+        elevation: 0,
+        title: SkeletonAnimation(
+          shimmerColor: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+          shimmerDuration: 1000,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: IconButton(
+                    icon: Icon(Icons.logout, color: colorIcon),
+                    onPressed: () {
+                      logout();
+                    }),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/me');
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: AssetImage("assets/default-profile.png"),
+                          fit: BoxFit.cover)),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      body: LoadingDashboard(context),
+    );
+  }
+
+  Scaffold buildScaffold(BuildContext context, UserInfo userInfo) {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
@@ -178,6 +241,142 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+Widget LoadingDashboard(context) {
+  final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
+
+  Items item1 = new Items(
+      title: "Mi club",
+      subtitle: "Sierra Madre",
+      color: Colors.grey,
+      img: "assets/club.png",
+      page: "/my-club");
+
+  // Items item5 = new Items(
+  //     title: "Mi club",
+  //     subtitle: "Sierra Madre",
+  //     color: Colors.red,
+  //     img: "assets/user.png",
+  //     page: "/me");
+
+  Items item2 = new Items(
+      title: "Tareas",
+      subtitle: "Ver asignaciones",
+      color: Colors.grey,
+      img: "assets/clipboard.png",
+      page: "/tasks");
+  Items item3 = new Items(
+      title: "Votaciones",
+      subtitle: "Tu opinión cuenta",
+      color: Colors.grey,
+      img: "assets/cabina-de-votacion.png",
+      page: "/polls-demo");
+  Items item4 = new Items(
+      title: "Eventos",
+      subtitle: "Proximamente",
+      color: Colors.grey,
+      img: "assets/calendario.png",
+      page: "events");
+
+  List<Items> myList = [item1, item2, item3, item4];
+  var size = MediaQuery.of(context).size;
+
+  return ListView(
+    physics: NeverScrollableScrollPhysics(),
+    padding: EdgeInsets.only(left: 25, right: 20, bottom: 20, top: 35),
+    children: [
+      SkeletonAnimation(
+        shimmerColor: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+        shimmerDuration: 1000,
+        child: Container(width: 50, height: 50),
+      ),
+      SizedBox(height: 7),
+      SkeletonAnimation(
+        shimmerColor: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+        shimmerDuration: 1000,
+        child: Container(width: 30, height: 30),
+      ),
+      GridView.count(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          childAspectRatio: 1.0,
+          padding: EdgeInsets.only(top: 50),
+          crossAxisCount: 2,
+          crossAxisSpacing: 18,
+          mainAxisSpacing: 18,
+          children: myList.map((data) {
+            return GestureDetector(
+              onTap: () {
+                print("Tap ${data.page}");
+                Navigator.of(context).pushNamed('${data.page}');
+              },
+              child: SkeletonAnimation(
+                shimmerColor: Colors.grey[200],
+                shimmerDuration: 1000,
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(data.img, width: 42, color: Colors.white),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Text(
+                        data.title,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        data.subtitle,
+                        style: GoogleFonts.poppins(
+                            color: Colors.white38,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      // Text(
+                      //   data.event,
+                      //   style: GoogleFonts.poppins(
+                      //       color: Colors.white70,
+                      //       fontSize: 11,
+                      //       fontWeight: FontWeight.w600),
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList()),
+      Padding(
+        padding: const EdgeInsets.only(top: 130),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+                child: Image(
+              image: AssetImage(
+                Get.isDarkMode ? "assets/logo-light.png" : "assets/logo.png",
+              ),
+              height: Get.isDarkMode ? 60 : 75,
+            )),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
 Widget Dashboard(String first_name, context) {
   final Color primaryColor = Color.fromRGBO(23, 69, 143, 1);
 
@@ -203,7 +402,7 @@ Widget Dashboard(String first_name, context) {
       page: "/tasks");
   Items item3 = new Items(
       title: "Votaciones",
-      subtitle: "Próximamente",
+      subtitle: "Tu opinión cuenta",
       color: Colors.orange,
       img: "assets/cabina-de-votacion.png",
       page: "/polls-demo");
